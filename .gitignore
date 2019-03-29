@@ -21,23 +21,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-
-# Android/IntelliJ
-#
-build/
-.idea
-.gradle
-local.properties
-*.iml
-
-# node.js
-#
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# BUCK
-buck-out/
 \.buckd/
 *.keystore
 
@@ -54,3 +37,4 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+node_modules/

@@ -9,7 +9,9 @@ export default class Addasset extends Component {
                 noShadow 
                 style={{backgroundColor:'#8854d0'}}>
               <Left>
-                <Button transparent>
+                <Button
+                  onPress={()=>this.props.navigation.goBack()} 
+                  transparent>
                   <Icon name="arrow-back" />
                 </Button>
               </Left>

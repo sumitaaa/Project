@@ -86,7 +86,7 @@ export default class Dataasset extends Component {
           <TextInput 
             style={styles.titel} />
         </View>
-        <View style={styles.displayRow}>
+        {/* <View style={styles.displayRow}>
           <Text style={styles.textRow}>กำหนดการแจ้งเตือน</Text>
           <DatePicker
             defaultDate={new Date(2019, 1, 1)}
@@ -103,7 +103,7 @@ export default class Dataasset extends Component {
             onDateChange={this.setDate}
             disabled={false}
             />
-        </View>
+        </View> */}
 
         </Container>
           <Button full primary>
