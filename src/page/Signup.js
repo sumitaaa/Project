@@ -8,8 +8,6 @@ export default class Signup extends React.Component {
     super(props)
     this.state = {
       EnterName:'',
-      EnterNemberID:'',
-      EnterAddress:'',
       EnterTel:'',
       EnterEmail:'',
       EnterImage:null
@@ -35,8 +33,6 @@ export default class Signup extends React.Component {
         //alert('Ever sign in แล้ว')
         this.setState({
           EnterName: await AsyncStorage.getItem('Name'),
-          EnterNemberID: await AsyncStorage.getItem('NemberID'),
-          EnterAddress: await AsyncStorage.getItem('Address'),
           EnterTel: await AsyncStorage.getItem('Tel'),
           EnterImage: await AsyncStorage.getItem('Image'),
           EnterEmail: await AsyncStorage.getItem('Email'),
@@ -53,16 +49,6 @@ export default class Signup extends React.Component {
         EnterName: text
       })
     }
-    setEnterNemberID = (text) => {
-      this.setState({
-        EnterNemberID: text
-      })
-    }
-    setEnterAddress = (text) => {
-      this.setState({
-        EnterAddress: text
-      })
-      }
     setEnterTel = (text) => {
       this.setState({
         EnterTel: text
@@ -75,15 +61,13 @@ export default class Signup extends React.Component {
     }
 
     Save = async() => {
-      let { EnterImage ,EnterAddress, EnterEmail, EnterName, EnterNemberID, EnterTel } = this.state
-      if(EnterImage===null || EnterAddress==='' || EnterEmail==='' || EnterName==='' || EnterNemberID==='' || EnterTel==='') {
+      let { EnterImage , EnterEmail, EnterName, EnterTel } = this.state
+      if(EnterImage===null || EnterEmail==='' || EnterName==='' || EnterTel==='') {
         alert('Please complete the information')
       }else {
         // บันทึก
-        await AsyncStorage.setItem('Address', EnterAddress)
         await AsyncStorage.setItem('Email', EnterEmail)
         await AsyncStorage.setItem('Name', EnterName)
-        await AsyncStorage.setItem('NemberID', EnterNemberID)
         await AsyncStorage.setItem('Tel', EnterTel)
         await AsyncStorage.setItem('Image', EnterImage.uri)
         alert('Save Success')
@@ -94,7 +78,7 @@ export default class Signup extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../../images/images.jpg')} 
+        source={require('../../images/Low.jpg')} 
         style={styles.container}
       >
          
@@ -122,26 +106,12 @@ export default class Signup extends React.Component {
                 }}>Choose Photo</Text>
             </View>
           </TouchableOpacity>
-        }
-        
-        
+        }       
         <TextInput
           value={this.state.EnterName} 
           onChangeText={this.setEnterName}
           style={styles.titel}
           placeholder="Enter Name" 
-        />
-        <TextInput
-          value={this.state.EnterNemberID} 
-          onChangeText={this.setEnterNemberID}
-          style={styles.titel} 
-          placeholder="Enter Nember ID" 
-        />
-        <TextInput
-          value={this.state.EnterAddress} 
-          onChangeText={this.setEnterAddress} 
-          style={styles.titel}
-          placeholder="Enter Address" 
         />
         <TextInput
           value={this.state.EnterTel} 

@@ -11,7 +11,7 @@ export default class IconCom extends Component {
                 style={styles.iconStyle}
                 source={this.props.url}
             />
-            <Text style={{textAlign: 'center'}}>{this.props.text}</Text>
+            <Text style={{textAlign: 'center',fontSize:18}}>{this.props.text}</Text>
         </TouchableOpacity>
     )
   }
@@ -19,9 +19,9 @@ export default class IconCom extends Component {
 
 const styles = StyleSheet.create({
     iconStyle: {
-        borderRadius: 100, 
+        borderRadius: 70, 
         height: 100, 
         width: 100,
-        marginHorizontal: 10
+        marginHorizontal: 50
     }
 })

@@ -3,7 +3,9 @@ package com.project_2;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.vonovak.AddCalendarEventPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import org.pgsqlite.SQLitePluginPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -25,7 +27,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AddCalendarEventPackage(),
             new RNGestureHandlerPackage(),
+            new SQLitePluginPackage(),
             new ImagePickerPackage()
       );
     }

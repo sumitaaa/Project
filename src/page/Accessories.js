@@ -1,22 +1,31 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View ,TextInput, Modal, Dimensions, TouchableOpacity} from 'react-native'
-import { Container, Header, Title, Button, Icon,DatePicker, Left, Right, Body ,Content} from "native-base";
+import { Container, Header, Title, Button, Icon,Form, Left, Right, Body ,Content,Picker} from "native-base";
 
 const {height, width} = Dimensions.get('window')
 
-export default class Dataasset extends Component {
+export default class Accessories extends Component {
     constructor(props) {
         super(props);
         this.state = { 
           chosenDate: new Date(),
-          modalVisible: false
+          modalVisible: false,
+          selected: undefined
         };
         this.setDate = this.setDate.bind(this);
       }
+
+      
+
       setDate(newDate) {
         this.setState({ chosenDate: newDate });
       //#ffd32a
       }
+    onValueChange(value) {
+      this.setState({
+        selected: value
+      });
+    }
     render() {
     return (
      <Container>
@@ -40,50 +49,90 @@ export default class Dataasset extends Component {
 
         </Modal>
 
-         <Header style={{backgroundColor: '#8854d0'}}>
+         <Header style={{backgroundColor: '#eb4d4b'}}>
           <Left>
-            <Button transparent>
+            <Button
+              onPress={()=>this.props.navigation.goBack()}  
+              transparent>
               <Icon name='arrow-back' />
             </Button>
           </Left>
           <Body>
-            <Title>ข้อมูลทรัพย์สิน</Title>
+            <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
           <Right>
-            <Button onPress={()=>{this.setState({modalVisible: true})}} transparent>
-              <Text style={{color: 'white'}}>ถ่ายโอน</Text>
+            <Button 
+              onPress={()=>{this.setState({modalVisible: true})}} primary>
+              <Icon type='Entypo' name='export' />
+              <Text style={{color: 'white',padding:15}}>ถ่ายโอน</Text>
             </Button>
           </Right>
         </Header>
         <Container style={{marginTop: 20}}>
+          <Form>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              placeholder="Select your SIM"
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              style={{ width: undefined }}
+              selectedValue={this.state.selected}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              <Picker.Item label="สร้อย" value="สร้อย" />
+              <Picker.Item label="แหวน" value="แหวน" />
+              <Picker.Item label="นาฬิกา" value="นาฬิกา" />
+              <Picker.Item label="กำไร" value="กำไร" />
+            </Picker>
+          </Form>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
+          <Text style={styles.textRow}>ยี่ห้อ</Text>
           <TextInput 
+            placeholder = "ระบุยี่ห้อ "
+            placeholderTextColor = "#eb4d4b"
             style={styles.titel} />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
+          <Text style={styles.textRow}>รุ่น</Text>
           <TextInput 
+            placeholder = "ระบุรุ่น "
+            placeholderTextColor = "#eb4d4b"
             style={styles.titel} />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
+          <Text style={styles.textRow}>สี</Text>
           <TextInput 
+            placeholder = "ระบุสี "
+            placeholderTextColor = "#eb4d4b"
             style={styles.titel} />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
+          <Text style={styles.textRow}>ขนาด</Text>
           <TextInput 
+            placeholder = "ระบุขนาด "
+            placeholderTextColor = "#eb4d4b"
             style={styles.titel} />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
-          <TextInput 
+          <Text style={styles.textRow}>น้ำหนัก</Text>
+          <TextInput
+            placeholder = "ระบุน้ำหนัก "
+            placeholderTextColor = "#eb4d4b" 
             style={styles.titel} />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ทะเบียนรถ</Text>
-          <TextInput 
+          <Text style={styles.textRow}>ชื่อผู้ถือทรัพย์สินร่วม</Text>
+          <TextInput
+            placeholder = "ระบุชื่อผู้ถือทรัพย์สินร่วม "
+            placeholderTextColor = "#eb4d4b"  
+            style={styles.titel} />
+        </View>
+        <View style={styles.displayRow}>
+          <Text style={styles.textRow}>Note</Text>
+          <TextInput
+            placeholder = "ระบุข้อความเพิ่มเติม "
+           placeholderTextColor = "#eb4d4b" 
             style={styles.titel} />
         </View>
         {/* <View style={styles.displayRow}>
@@ -117,30 +166,27 @@ export default class Dataasset extends Component {
 
 const styles = StyleSheet.create({
     titel:{
-        borderWidth:1,
-        width: "80%",
-        backgroundColor: 'white',
-        borderColor:'black',
-        marginLeft:50
+    margin: 15,
+    height: 40,
+    width: 350,
+    borderColor: '#eb4d4b',
+    borderWidth: 1
       },
     displayRow: {
-      flexDirection: 'row', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      width: '80%',
-      marginLeft: '10%', 
-      marginBottom: 20
+      marginLeft: 45,
+      backgroundColor: '#ffffff'
     },
     textRow: {
-      textAlign: 'center'
+     color:'black'
+
     },
     dateStyle: {
       color: "white", 
       fontWeight: 'bold',
       textAlign: 'center',
       backgroundColor: '#e67e22', 
-      paddingHorizontal: 102, 
-      marginLeft: '5%',
+      paddingHorizontal: 185, 
+      marginLeft: '17%',
       borderRadius: 4,
     }
 })

@@ -4,6 +4,12 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from './src/page/Home';
 import Signup from './src/page/Signup';
 import Addasset from './src/page/Addasset';
+import Accessories from './src/page/Accessories';
+import Vehicle from './src/page/Vehicle';
+import Electornic from './src/page/Electornic';
+import Home2 from './src/page/Home2';
+import CalendarCom from './src/page/CalendarCom';
+
 
 class App extends Component {
   
@@ -34,6 +40,9 @@ class App extends Component {
 }
 
 const AppNavigator = createStackNavigator({
+  Calendar: {
+    screen: CalendarCom
+  },
   Splash: {
     screen: App
   },
@@ -45,7 +54,20 @@ const AppNavigator = createStackNavigator({
   },
   Addasset: {
     screen: Addasset
-  }
+  },
+  Accessories:{
+   screen: Accessories 
+  },
+  Vehicle:{
+    screen:Vehicle
+  },
+  Electornic:{
+    screen: Electornic
+  },
+  Home2:{
+    screen:Home2
+  },
+ 
 }, {headerMode: 'none'})
 
 export default createAppContainer(AppNavigator)
