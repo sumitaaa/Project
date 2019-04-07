@@ -20,7 +20,7 @@ export default class Signup extends React.Component {
       noData: true
     }
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('response :', response)
+      //console.log('response :', response)
       if(response.uri) {
         this.setState({EnterImage: response})
       }
@@ -38,7 +38,7 @@ export default class Signup extends React.Component {
           EnterEmail: await AsyncStorage.getItem('Email'),
         })
 
-        console.log('sss', await AsyncStorage.getItem('Image'))
+        //console.log('sss', await AsyncStorage.getItem('Image'))
       }else {
         alert('Never sign in !')
       }

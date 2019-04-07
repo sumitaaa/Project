@@ -13,7 +13,6 @@ export default class CanlendarCom extends Component {
       items: {}
     };
   }
-
   render() {
     return (
       <Agenda
@@ -40,7 +39,6 @@ export default class CanlendarCom extends Component {
       />
     );
   }
-
   loadItems(day) {
     setTimeout(() => {
       for (let i = -15; i < 85; i++) {

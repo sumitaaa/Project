@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View ,TextInput, Modal, Dimensions, TouchableOpacity} from 'react-native'
+import { Text, StyleSheet, View ,TextInput, Modal, Dimensions, TouchableOpacity,ScrollView} from 'react-native'
 import { Container, Header, Title, Button, Icon,Form, Left, Right, Body ,Content,Picker} from "native-base";
+import Mytext from '../components/Mytext'
+import Mytextinput from '../components/Mytextinput';
 
 const {height, width} = Dimensions.get('window')
 
-export default class Accessories extends Component {
+export default class Electornic extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -69,7 +71,7 @@ export default class Accessories extends Component {
             </Button>
           </Right>
         </Header>
-        <Container style={{marginTop: 20}}>
+        <ScrollView style={{marginTop: 20}}>
           <Form>
             <Picker
               mode="dropdown"
@@ -88,60 +90,52 @@ export default class Accessories extends Component {
             </Picker>
           </Form>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ยี่ห้อ</Text>
-          <TextInput 
+          <Mytext text ='ยี่ห้อ'/>
+          <Mytextinput
             placeholder = "ระบุยี่ห้อ "
-            placeholderTextColor = "#eb4d4b"
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>รุ่น</Text>
-          <TextInput 
+          <Mytext text ='รุ่น'/>
+          <Mytextinput 
             placeholder = "ระบุรุ่น "
-            placeholderTextColor = "#eb4d4b"
-            style={styles.titel} />
+            />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>สี</Text>
-          <TextInput 
+          <Mytext text ='สี'/>
+          <Mytextinput 
             placeholder = "ระบุสี "
-            placeholderTextColor = "#eb4d4b"
-            style={styles.titel} />
+            />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>วันที่ซื้อ</Text>
-          <TextInput 
+          <Mytext text ='วันที่ซื้อ'/>
+          <Mytextinput
             placeholder = "ระบุวันที่ซื้อ "
-            placeholderTextColor = "#eb4d4b"
-            style={styles.titel} />
+            />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ประกัน</Text>
-          <TextInput
+          <Mytext text ='ประกัน'/>
+          <Mytextinput
             placeholder = "ระบุวันหมดประกัน "
-            placeholderTextColor = "#eb4d4b" 
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ร้าน</Text>
-          <TextInput
+          <Mytext text ='ร้าน'/>
+          <Mytextinput
             placeholder = "ระบุวันร้านที่ซื้อ "
-            placeholderTextColor = "#eb4d4b" 
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ชื่อผู้ถือทรัพย์สินร่วม</Text>
-          <TextInput
+          <Mytext text ='ชื่อผู้ถือทรัพย์สินร่วม'/>
+          <Mytextinput
             placeholder = "ระบุชื่อผู้ถือทรัพย์สินร่วม "
-            placeholderTextColor = "#eb4d4b"  
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>Note</Text>
-          <TextInput
+          <Mytext text ='์Note'/>
+          <Mytextinput
             placeholder = "ระบุข้อความเพิ่มเติม "
-           placeholderTextColor = "#eb4d4b" 
-            style={styles.titel} />
+            />
         </View>
         {/* <View style={styles.displayRow}>
           <Text style={styles.textRow}>กำหนดการแจ้งเตือน</Text>
@@ -162,7 +156,7 @@ export default class Accessories extends Component {
             />
         </View> */}
 
-        </Container>
+        </ScrollView>
           <Button full primary>
             <Text style={{color: 'white'}}>Save</Text>
           </Button>
@@ -173,19 +167,10 @@ export default class Accessories extends Component {
     }
 
 const styles = StyleSheet.create({
-    titel:{
-    margin: 15,
-    height: 40,
-    width: 350,
-    borderColor: '#eb4d4b',
-    borderWidth: 1
-      },
+
     displayRow: {
       marginLeft: 45,
       backgroundColor: '#ffffff'
-    },
-    textRow: {
-     color:'black'
 
     },
     dateStyle: {

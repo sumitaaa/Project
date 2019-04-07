@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { AsyncStorage, Text, StyleSheet, View ,TextInput, Modal, Dimensions, TouchableOpacity} from 'react-native'
+import { AsyncStorage, Text, StyleSheet, View ,TextInput, Modal, Dimensions, TouchableOpacity, ScrollView} from 'react-native'
 import { Container, Header, Title, Button, Icon,Form, Left, Right, Body ,Content,Picker} from "native-base";
+import Mytext from '../components/Mytext'
+import Mytextinput from '../components/Mytextinput';
 
 const {height, width} = Dimensions.get('window')
 
@@ -73,7 +75,7 @@ export default class Vehicle extends Component {
             </Button>
           </Right>
         </Header>
-        <Container style={{marginTop: 20}}>
+        <ScrollView style={{marginTop: 20, flexGrow: 1}}>
           <Form>
             <Picker
               mode="dropdown"
@@ -92,74 +94,58 @@ export default class Vehicle extends Component {
             </Picker>
         </Form>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ยี่ห้อ</Text>
-          <TextInput
+          <Mytext text ='ยี่ห้อ'/>
+          <Mytextinput
             placeholder = "ระบุยี่ห้อ "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text)=>{this.setState({brand: text})}} 
-            style={styles.titel} />
+            />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>รุ่น</Text>
-          <TextInput 
+          <Mytext text ='รุ่น'/>
+          <Mytextinput
             placeholder = "ระบุรุ่น "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text) => {this.setState({spec:text})}}
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>สี</Text>
-          <TextInput 
+          <Mytext text ='สี'/>
+          <Mytextinput 
             placeholder = "ระบุสี "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text) => {this.setState({color:text})}}
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>เลขทะเบียน</Text>
-          <TextInput
+          <Mytext text ='เลขทะเบียน'/>
+          <Mytextinput
             placeholder = "ระบุเลขทะเบียน "
-            placeholderTextColor = "#eb4d4b" 
-            onChangeText={(text) => {this.setState({number:text})}}
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>วันจดทะเบียน</Text>
-          <TextInput 
+          <Mytext text ='วันจดทะเบียน'/>
+          <Mytextinput
             placeholder = "ระบุวันจดทะเบียน "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text) => {this.setState({date:text})}}
-            style={styles.titel} />
+            />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>จังหวัด</Text>
-          <TextInput   
+        <Mytext text ='จังหวัด'/>
+          <Mytextinput 
             placeholder = "ระบุจังหวัด "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text) => {this.setState({province:text})}}
-            style={styles.titel} />
+           />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ชื่อผู้ถือกรรมสิทธิ์</Text>
-          <TextInput
+          <Mytext text ='ชื่อผู้ถือกรรมสิทธิ์'/>
+          <Mytextinput
             placeholder = "ระบุชื่อผู้ถือกรรมสิทธิ์ "
-            placeholderTextColor = "#eb4d4b" 
-            onChangeText={(text) => {this.setState({name:text})}}
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>ชื่อผู้ถือทรัพย์สินร่วม</Text>
-          <TextInput 
+          <Mytext text ='ชื่อผู้ถือทรัพย์สินร่วม'/>
+          <Mytextinput 
             placeholder = "ระบุชื่อผู้ถือทรัพย์สินร่วม "
-            placeholderTextColor = "#eb4d4b"
-            onChangeText={(text) => {this.setState({partner:text})}}
-            style={styles.titel} />
+             />
         </View>
         <View style={styles.displayRow}>
-          <Text style={styles.textRow}>Note</Text>
-          <TextInput 
-            onChangeText={(text) => {this.setState({note:text})}}
-            style={styles.titel} />
+          <Mytext text ='Note'/>
+          <Mytextinput 
+            placeholder = "ระบุข้อความเพิ่มเติม "
+             />
         </View>
         {/* <View style={styles.displayRow}>
           <Text style={styles.textRow}>กำหนดการแจ้งเตือน</Text>
@@ -180,7 +166,7 @@ export default class Vehicle extends Component {
             />
         </View> */}
 
-        </Container>
+        </ScrollView>
           <Button 
             onPress={async() => {
               let dataArray
@@ -201,7 +187,7 @@ export default class Vehicle extends Component {
                 dataArray.push(dataInput)
               }
               await AsyncStorage.setItem('carArray', JSON.stringify(dataArray)) // array or json to string
-              console.log('&&&&&&fn : ', this.props.navigation.state)
+             // console.log('&&&&&&fn : ', this.props.navigation.state)
               this.props.navigation.state.params.refresh()
               this.props.navigation.navigate('Addasset', {comeFrom: 'car'})
             }}
@@ -215,19 +201,10 @@ export default class Vehicle extends Component {
     }
 
 const styles = StyleSheet.create({
-    titel:{
-      margin: 15,
-      height: 40,
-      width: 350,
-      borderColor: '#eb4d4b',
-      borderWidth: 1
-      },
+  
     displayRow: {
       marginLeft: 45,
       backgroundColor: '#ffffff'
-    },
-    textRow: {
-      color:'black'
     },
     dateStyle: {
       color: "white", 

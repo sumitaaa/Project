@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, AsyncStorage } from 'react-native'
+import { Text, StyleSheet, View, AsyncStorage, } from 'react-native'
 import { Container, Header, Title, Button, Icon, Left, Right, Body ,Content} from "native-base";
 
 const Item = (props) => (
@@ -40,21 +40,21 @@ export default class Addasset extends Component {
 
   async getDataArray() {
     const comeFrom = this.props.navigation.getParam('comeFrom', 'none');
-    console.log('comeFrom : ', comeFrom)
+    //console.log('comeFrom : ', comeFrom)
 
     let dataArray = []
     if(comeFrom==='car') {
       dataArray = await AsyncStorage.getItem('carArray')
-      console.log('data : ', dataArray)
+      //console.log('data : ', dataArray)
       if(dataArray!==null && dataArray!=='') {
-        console.log('is not null')
+        //console.log('is not null')
         dataArray = JSON.parse(dataArray)
       }else {
         dataArray = []
-        console.log('is null')
+        //console.log('is null')
       }
 
-      console.log('*** cars : ', dataArray) 
+      //console.log('*** cars : ', dataArray) 
       this.setState({dataArray})
     }else if(comeFrom==='accessories') { 
       
@@ -83,7 +83,7 @@ export default class Addasset extends Component {
                 </Button>
               </Left>
               <Body>
-                <Title>Add Asset</Title>
+                <Title>เพิ่มข้อมูลทรัพย์สิน</Title>
               </Body>
               <Right>
                 <Button 
