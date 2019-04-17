@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, View, Image,Modal,Dimensions,TouchableOpacity } from 'react-native'
 import { Container, Header, Title, Button, Icon, Footer,Right, FooterTab, Body ,Content} from "native-base";
 import IconCom from '../components/IconCom'
+import SQLite from 'react-native-sqlite-storage'
 
 const {height, width} = Dimensions.get('window')
+
+var db = SQLite.openDatabase({ name: 'myDB.db'});
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +17,17 @@ export default class Home extends Component {
     this.setDate = this.setDate.bind(this);
   }
 
+  componentDidMount() {
+    db.transaction((tx) => {
+      tx.executeSql("SELECT * FROM user",[], (tx, result) => {
+        var len = result.rows.length
+        for(let i=0;i<len;i++) {
+          let row = result.rows.item(i)
+          console.log('data len : '+i+' : ', row)
+        }
+      })
+    })
+  }
 
   setDate(newDate) {
     this.setState({ chosenDate: newDate });

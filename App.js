@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, AsyncStorage } from 'react-native'
+import { Text, StyleSheet, View, AsyncStorage, YellowBox } from 'react-native'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from './src/page/Home';
 import Signup from './src/page/Signup';
@@ -10,6 +10,8 @@ import Electornic from './src/page/Electornic';
 import Home2 from './src/page/Home2';
 import CalendarCom from './src/page/CalendarCom';
 import SQLite from 'react-native-sqlite-storage'
+
+YellowBox.ignoreWarnings([''])
 
 var db = SQLite.openDatabase({ name: 'myDB.db'});
 
@@ -32,30 +34,28 @@ class App extends Component {
     
     db.transaction((tx) => {
 
-      tx.executeSql('CREATE TABLE IF NOT EXISTS profile(first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
+      tx.executeSql('CREATE TABLE IF NOT EXISTS user(ID int, first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
       [], (tx, result) => {
         console.log('create table result : ', result)
       }, (e) => {
         console.log('error create table: ', e)
       })
 
-      tx.executeSql("INSERT INTO profile(first_name, last_name,email,phone) VALUES ('Sikarin','Poonsawat' ,'sssss@gmail.com','099999999')",
-      [], (tx, result) => {
-        console.log('result save : ', result)
-      })
+      // tx.executeSql("INSERT INTO user(first_name, last_name,email,phone) VALUES ('Sikarin','Poonsawat' ,'sssss@gmail.com','099999999')",
+      // [], (tx, result) => {
+      //   console.log('result save : ', result)
+      // })
 
-      tx.executeSql("SELECT * FROM profile",
-      [], (tx, result) => {
-       // console.log('result select : ', result)
-      var len = result.rows.length
-      for(let i=0;i<len;i++) {
-        let row = result.rows.item(i)
-        console.log('data len : '+i+' : ', row)
-      }
+      tx.executeSql("SELECT * FROM user",[], (tx, result) => {
+        console.log('result select : ', result)
+        var len = result.rows.length
+        if(len===0) { // ต้องลงทะเบียน
+          this.props.navigation.navigate('Signup')
+        }else { // ไปหน้าโปรไฟล์
+          this.props.navigation.navigate('Home')
+        }
       })
     })
-
-    this.CheckIsSignIn()
   }
 
   render() {

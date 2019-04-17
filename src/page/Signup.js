@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import {Text, StyleSheet, View,TextInput,ImageBackground,TouchableOpacity,Image, AsyncStorage } from 'react-native'
 import ImagePicker from 'react-native-image-picker';
-import { Container, Header, Left, Body, Right, Button, Title } from 'native-base';
+import { Container, Header, Left, Body, Right, Button, Title,Footer,FooterTab,Icon } from 'native-base';
+import SQLite from 'react-native-sqlite-storage'
+
+var db = SQLite.openDatabase({ name: 'myDB.db'});
 
 export default class Signup extends React.Component {
   constructor(props){
@@ -10,8 +13,13 @@ export default class Signup extends React.Component {
       EnterName:'',
       EnterTel:'',
       EnterEmail:'',
-      EnterImage:null
+      EnterImage:null,
+      isLogin: false,
+      isCanEdit: false,
     }
+  }
+
+  componentDidMount() {
     this.CheckIsSignIn()
   }
 
@@ -27,21 +35,33 @@ export default class Signup extends React.Component {
     })
   }
 
-    CheckIsSignIn = async() => {
-      let name = await AsyncStorage.getItem('Name2')
-      if(name!=='' && name!==null) {
-        //alert('Ever sign in แล้ว')
-        this.setState({
-          EnterName: await AsyncStorage.getItem('Name'),
-          EnterTel: await AsyncStorage.getItem('Tel'),
-          EnterImage: await AsyncStorage.getItem('Image'),
-          EnterEmail: await AsyncStorage.getItem('Email'),
-        })
+  ChangePage = (name, from) => {
+    this.props.navigation.navigate(name, {
+      comeFrom: from
+    })
+  }
 
-        //console.log('sss', await AsyncStorage.getItem('Image'))
-      }else {
-        alert('Never sign in !')
-      }
+    CheckIsSignIn = async() => {
+      db.transaction((tx) => {
+        tx.executeSql("SELECT * FROM user",[], (tx, result) => {
+          var len = result.rows.length
+          if(len===0) { // ต้องลงทะเบียน
+            // ปล่อยให้ว่าง เพื่อกรอก
+            this.setState({isCanEdit: true})
+          }else { // ไปหน้าโปรไฟล์
+            // มีข้อมูล กดแก้ไขได้
+            let row = result.rows.item(0)
+            console.log('row :', row)
+            this.setState({
+              EnterName: row.first_name+' '+row.last_name,
+              EnterTel: row.phone,
+              EnterEmail: row.email,
+              isLogin: true,
+              // EnterImage: 
+            })
+          }
+        })
+      })
     }
 
     setEnterName = (text) => {
@@ -60,30 +80,60 @@ export default class Signup extends React.Component {
       })     
     }
 
-    Save = async() => {
-      let { EnterImage , EnterEmail, EnterName, EnterTel } = this.state
-      if(EnterImage===null || EnterEmail==='' || EnterName==='' || EnterTel==='') {
-        alert('Please complete the information')
-      }else {
-        // บันทึก
-        await AsyncStorage.setItem('Email', EnterEmail)
-        await AsyncStorage.setItem('Name', EnterName)
-        await AsyncStorage.setItem('Tel', EnterTel)
-        await AsyncStorage.setItem('Image', EnterImage.uri)
-        alert('Save Success')
-      }
-    } 
+    Save = (isEmpty) => {
+      let status = true
+      let { EnterEmail, EnterImage, EnterName, EnterTel } = this.state
+      if(EnterName==='' || EnterTel==='' || EnterEmail==='') status = false
+      let name = EnterName.split(' ')
+      if(name.length!==2) status = false
 
+      if(status===false) {
+        alert('กรุณาข้อมูลให้ครบถ้วน')
+        return
+      }
+
+      if(isEmpty) { // insert
+        db.transaction((tx) => {
+          tx.executeSql(`INSERT INTO user(id, first_name, last_name, email, phone) 
+            VALUES ('1', '${name[0]}', '${name[1]}', '${EnterEmail}', '${EnterTel}')`,
+          [], (tx, result) => {
+            console.log('result insert : ', result)
+            this.props.navigation.navigate('Home')
+          })
+        })
+      }else { // update
+        db.transaction((tx) => {
+          tx.executeSql(`UPDATE user SET first_name='${name[0]}', last_name='${name[1]}', 
+            email='${EnterEmail}', phone='${EnterTel}' WHERE id='1'`,
+          [], (tx, result) => {
+            console.log('result update : ', result)
+            this.props.navigation.navigate('Home')
+          })
+        })
+      }
+    }
+
+    Edit = () => {
+      if(!this.state.isCanEdit) { // ยังเป็นปุ่ม edit อยู่
+        this.setState({isCanEdit: true})
+      }else { // เป็นปุ่ม save แล้ว
+        //บันทึก แล้วเปลี่ยนหน้า
+        this.Save(false)
+      }
+    }
 
   render() {
     return (
       <ImageBackground
-        source={require('../../images/Low.jpg')} 
+        source={this.state.isLogin ? null : require('../../images/Low.jpg')} 
         style={styles.container}
       >
-         
-        <Text style={{fontSize:50,color:'white'}}> Welcome </Text>
-        <Text style={{marginBottom:30,marginTop:40,fontSize:20,color: 'white'}}> Please enter your Personal info </Text>
+      { !this.state.isLogin &&
+        <View>
+          <Text style={{fontSize:50,color:'white'}}> Welcome </Text>
+          <Text style={{marginBottom:30,marginTop:40,fontSize:20,color: 'white'}}> Please enter your Personal info </Text>
+        </View>
+      }
         {
           this.state.EnterImage!==null ?
           <Image source={{uri: this.state.EnterImage.uri}} style={{borderRadius:70,marginBottom:20,width: 130, height: 130}}></Image>
@@ -111,26 +161,61 @@ export default class Signup extends React.Component {
           value={this.state.EnterName} 
           onChangeText={this.setEnterName}
           style={styles.titel}
-          placeholder="Enter Name" 
+          placeholder="Enter Name"
+          editable={this.state.isCanEdit} 
         />
         <TextInput
           value={this.state.EnterTel} 
           onChangeText={this.setEnterTel} 
           style={styles.titel}
           placeholder="Enter Tel"
+          editable={this.state.isCanEdit}
         />
         <TextInput 
           value={this.state.EnterEmail} 
           onChangeText={this.setEnterEmail}
           style={styles.titel}
           placeholder="Enter Email" 
+          editable={this.state.isCanEdit}
         />
         <TouchableOpacity
-          onPress={this.Save}
+          onPress={this.state.isLogin ? this.Edit : this.Save}
           style={styles.button}
         >
-          <Text style={styles.textbutton}> Sign In </Text>
+          <Text style={styles.textbutton}>{this.state.isLogin ? (this.state.isCanEdit ? 'Save' : 'Edit') : 'Sign In'}</Text>
         </TouchableOpacity>
+        { this.state.isLogin &&
+        <Footer style={{position: 'absolute', bottom: 0,}}>
+          <FooterTab style={{backgroundColor:'#eb4d4b'}}>
+            <Button 
+                onPress={()=>{
+                  this.ChangePage('Signup')
+                }}
+                vertical>
+              <Icon name="person" />
+              <Text style={{color:'white'}}>Profile</Text>
+            </Button>
+            <Button vertical >
+              <Icon active name="home" />
+              <Text style={{color:'white'}}>Home</Text>
+            </Button>           
+            <Button 
+               onPress={()=>{this.setState({modalVisible: true})}}vertical>
+              <Icon type='MaterialIcons' name="drafts" />
+              <Text style={{color:'white'}}>Transfer</Text>
+            </Button>
+             <Button 
+              onPress={()=>{
+                this.ChangePage('Calendar')
+              }}
+              vertical>
+              <Icon type='Entypo' name="calendar" />
+              <Text style={{color:'white'}}>calendar</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+        }
+             
       </ImageBackground>
     )
   }
@@ -140,7 +225,8 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor: '#f3a683',
   },
   titel:{
     borderWidth:1,

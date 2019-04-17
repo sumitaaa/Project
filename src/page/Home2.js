@@ -40,12 +40,11 @@ export default class Home2 extends Component {
           >
           <View style={{flex: 1, backgroundColor: '#00000070'}}>
             <View style={{width: 350, height: 500, marginTop: (height-500)/2 ,backgroundColor: 'white', alignSelf: 'center'}}>
-              <TouchableOpacity
-                style={{position: 'absolute', top: 0, right: 0, paddingRight: 2, paddingTop: 2, paddingLeft: 18, paddingBottom: 18}}
-                onPress={()=>{this.setState({modalVisible: false})}}>
-                <Text style={{fontSize: 20, color: 'red'}}>X</Text>
-              </TouchableOpacity>
-              <Text>Hello Modal</Text>
+            <Right>
+                <Button onPress={()=>{this.setState({modalVisible: false})}} transparent>
+                  <Icon  type='AntDesign' name='close' />
+                </Button>
+                </Right>
             </View>
           </View>
 
@@ -143,7 +142,7 @@ export default class Home2 extends Component {
         </View> */}
 
         </ScrollView>
-          <Button full primary>
+          <Button full danger>
             <Text style={{color: 'white'}}>Save</Text>
           </Button>
 
