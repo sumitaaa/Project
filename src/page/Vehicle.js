@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { AsyncStorage, Text, StyleSheet, View, TextInput, Modal, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
-import { Container, Header, Title, Button, Icon, Form, Left, Right, Body, Content, Picker } from "native-base";
+import { Text, StyleSheet, View, TextInput, Modal, Dimensions, Alert, ScrollView } from 'react-native';
+import { Container, Header, Title, Button, Icon, Form, Left, Right, Body, Content, Picker } from 'native-base';
 import Mytext from '../components/Mytext'
 import Mytextinput from '../components/Mytextinput';
 import SQLite from 'react-native-sqlite-storage'
+import { thisTypeAnnotation } from '@babel/types';
 
 const { height, width } = Dimensions.get('window')
-var db = SQLite.openDatabase({ name: 'myDB.db' });
+var db = SQLite.openDatabase({ name: 'myB.db' });
 export default class Vehicle extends Component {
   constructor(props) {
     super(props);
@@ -27,12 +28,6 @@ export default class Vehicle extends Component {
     };
     this.setDate = this.setDate.bind(this);
   }
-  Save = () => {
-    let { type, brand, number, color, tabain, date,
-      province, ownership, partner, note } = this.state
-    console.log(type, brand, number, color, tabain, date, province, ownership, partner, note)
-  }
-
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
     //#ffd32a
@@ -42,19 +37,102 @@ export default class Vehicle extends Component {
       type: value
     });
   }
-  componentDidMount() {
-    db.transaction((tx) => {
-      tx.executeSql(`CREATE TABLE IF NOT EXISTS vehicle(ID int, type VARCHAR(30), 
-        brand VARCHAR(30), number VARCHAR(30), color VARCHAR(20), tabain VARCHAR(10),
-        date VARCHAR(50), province VARCHAR(30), ownership VARCHAR(60), 
-        partner VARCHAR(60), note VARCHAR(100) )`,
-        [], (tx, result) => {
-          console.log('create table result : ', result)
-        }, (e) => {
-          console.log('error create table: ', e)
-        })
-    })
-  }
+  Save = () => {
+    const { type, brand, number, color, tabain, date,
+      province, ownership, partner, note } = this.state
+    console.log(type, brand, number, color, tabain, date, province, ownership, partner, note)
+    if (type) {
+      if (brand) {
+        if (number) {
+          if (color) {
+            if (tabain) {
+              if (date) {
+                if (province) {
+                  if (ownership) {
+                    if (partner) {
+                      if (note) {
+                        db.transaction(function (tx) {
+                          tx.executeSql(`CREATE TABLE IF NOT EXISTS vehicle(ID int, type VARCHAR(30), 
+                              brand VARCHAR(30), number VARCHAR(30), color VARCHAR(20), tabain VARCHAR(10),
+                              date VARCHAR(50), province VARCHAR(30), ownership VARCHAR(60), 
+                              partner VARCHAR(60), note VARCHAR(100) )`,
+                            [type, brand, number, color, tabain, date, province, ownership, partner, note],
+                            (tx, result) => {
+                              console.log('create table result : ', result.rowsAffected);
+                              if (result.rowsAffected > 0) {
+                                Alert.alert(
+                                  'บันทึกสำเร็จ',
+                                  [
+                                    {
+                                      text: 'ตกลง',
+                                      onPress: () => that.props.navigation.navigate('Addasset'),
+                                    },
+                                  ],
+                                  { cancelable: false }
+                                );
+                              } else {
+                                alert('ล้มเหลว');
+                              }
+                              // this.props.navigation.navigate('Addasset')
+                              // }, (e) => {
+                              //   console.log('error create table: ', e)
+                            }
+                          );
+
+                        });
+
+                      }
+                    }
+                  } else {
+                    alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
+                  }
+                } else {
+                  alert('กรุณากรอกจังหวัด')
+                }
+              } else {
+                alert('กรุณากรอกวันที่ซื่อ')
+              }
+            } else {
+              alert('กรุณากรอกทะเบียน')
+            }
+          } else {
+            alert('กรุณากรอกสี')
+          }
+        } else {
+          alert('กรุณากรอกรุ่น')
+        }
+      } else {
+        alert('กรุณากรอกยี่ห้อ')
+      }
+    }
+  };
+  // componentDidMount() {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(`CREATE TABLE IF NOT EXISTS vehicle(ID int, type VARCHAR(30), 
+  //       brand VARCHAR(30), number VARCHAR(30), color VARCHAR(20), tabain VARCHAR(10),
+  //       date VARCHAR(50), province VARCHAR(30), ownership VARCHAR(60), 
+  //       partner VARCHAR(60), note VARCHAR(100) )`,
+  //       [type, brand, number, color, tabain, date, province, ownership, partner, note],
+  //       (tx, result) => {
+  //         console.log('create table result : ', result)
+  //         if (result.rowsAffected > 0) {
+  //           Alert.alert(
+  //             'บันทึกสำเร็จ'
+  //             [
+  //             {
+  //               text: 'ตกลง',
+  //               onPress: () => this.props.navigation.navigate('Addasset')
+  //             }
+  //             ],
+  //             {cancelable:false}
+  //           );
+  //         }
+  //         // this.props.navigation.navigate('Addasset')
+  //       }, (e) => {
+  //         console.log('error create table: ', e)
+  //       });
+  //   })
+  // }
   render() {
     return (
       <Container>
@@ -94,7 +172,7 @@ export default class Vehicle extends Component {
             </Button>
           </Right>
         </Header>
-        <ScrollView style={{ marginTop: 20, flexGrow: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20, flexGrow: 1 }}>
           <Form>
             <Picker
               mode="dropdown"
