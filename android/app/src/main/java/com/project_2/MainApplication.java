@@ -3,6 +3,8 @@ package com.project_2;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import org.pgsqlite.SQLitePluginPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -26,6 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
+            new RNFirebasePackage(),
             new RNGestureHandlerPackage(),
             new SQLitePluginPackage(),
             new ImagePickerPackage()

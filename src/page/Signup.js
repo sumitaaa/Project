@@ -4,7 +4,7 @@ import ImagePicker from 'react-native-image-picker';
 import { Container, Header, Left, Body, Right, Button, Title, Footer, FooterTab, Icon } from 'native-base';
 import SQLite from 'react-native-sqlite-storage'
 
-var db = SQLite.openDatabase({ name: 'myDB.db' });
+var db = SQLite.openDatabase({ name: 'DB.db' });
 
 export default class Signup extends React.Component {
   constructor(props) {
@@ -45,6 +45,10 @@ export default class Signup extends React.Component {
     db.transaction((tx) => {
       tx.executeSql("SELECT * FROM user", [], (tx, result) => {
         var len = result.rows.length
+        for (let i = 0; i < len; i++) {
+          let row = result.rows.item(i)
+          console.log('data len : ' + i + ' : ', row)
+        }
         if (len === 0) { // ต้องลงทะเบียน
           // ปล่อยให้ว่าง เพื่อกรอก
           this.setState({ isCanEdit: true })

@@ -11,11 +11,14 @@ import Home2 from './src/page/Home2';
 import CalendarCom from './src/page/CalendarCom';
 import com from './src/page/com';
 import musical from './src/page/musical';
+// import camera from './src/page/camera';
 import SQLite from 'react-native-sqlite-storage'
+import deleted from './src/page/deleted';
+import search from './src/page/search';
 
 YellowBox.ignoreWarnings([''])
 
-var db = SQLite.openDatabase({ name: 'myDB.db' });
+var db = SQLite.openDatabase({ name: 'DB.db' });
 
 class App extends Component {
 
@@ -36,17 +39,17 @@ class App extends Component {
 
     db.transaction((tx) => {
 
-      tx.executeSql('CREATE TABLE IF NOT EXISTS user(ID int, first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
-        [], (tx, result) => {
-          console.log('create table result : ', result)
-        }, (e) => {
-          console.log('error create table: ', e)
-        })
+      // tx.executeSql('CREATE TABLE IF NOT EXISTS user(ID int, first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
+      //   [], (tx, result) => {
+      //     console.log('create table result : ', result)
+      //   }, (e) => {
+      //     console.log('error create table: ', e)
+      //   })
 
-      // tx.executeSql("INSERT INTO user(first_name, last_name,email,phone) VALUES ()",
-      // [], (tx, result) => {
-      //   console.log('result save : ', result)
-      // })
+      //     // tx.executeSql("INSERT INTO user(first_name, last_name,email,phone) VALUES ()",
+      //     // [], (tx, result) => {
+      //     //   console.log('result save : ', result)
+      //     // })
 
       tx.executeSql("SELECT * FROM user", [], (tx, result) => {
         console.log('result select : ', result)
@@ -100,8 +103,17 @@ const AppNavigator = createStackNavigator({
   musical: {
     screen: musical
   },
+  // camera: {
+  //   screen: camera
+  // },
   Calendar: {
     screen: CalendarCom
+  },
+  deleted: {
+    screen: deleted
+  },
+  search: {
+    screen: search
   }
 
 }, { headerMode: 'none' })

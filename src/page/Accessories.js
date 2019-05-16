@@ -3,8 +3,10 @@ import { Text, StyleSheet, View, TextInput, Modal, Dimensions, TouchableOpacity,
 import { Container, Header, Title, Button, Icon, Form, Left, Right, Body, Content, Picker } from "native-base";
 import Mytext from '../components/Mytext'
 import Mytextinput from '../components/Mytextinput';
+import SQLite from 'react-native-sqlite-storage'
 
 const { height, width } = Dimensions.get('window')
+var db = SQLite.openDatabase({ name: 'DB.db' });
 
 export default class Accessories extends Component {
   constructor(props) {
@@ -12,12 +14,19 @@ export default class Accessories extends Component {
     this.state = {
       chosenDate: new Date(),
       modalVisible: false,
-      selected: undefined
+
+      type: 'สร้อย',
+      brand: '',
+      number: '',
+      color: '',
+      size: '',
+      weight: '',
+      partner: '',
+      note: ''
+
     };
     this.setDate = this.setDate.bind(this);
   }
-
-
 
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
@@ -25,9 +34,100 @@ export default class Accessories extends Component {
   }
   onValueChange(value) {
     this.setState({
-      selected: value
+      type: value
     });
   }
+  Save = () => {
+    const { type, brand, number, color, size, weight, partner, note } = this.state
+    console.log(type, brand, number, color, size, weight, partner, note)
+    console.log('is Saved accessories')
+    if (type) {
+      if (brand) {
+        if (number) {
+          if (color) {
+            if (size) {
+              if (weight) {
+                if (partner) {
+                  if (note) {
+                    console.log('is กรอกครบ Saved accessories')
+
+                    db.transaction((tx) => {
+                      tx.executeSql(`
+                            INSERT INTO accessories (
+                              type,
+                              brand,
+                              number,
+                              color,
+                              size,
+                              weight,
+                              partner,
+                              note
+                            )
+                            VALUES (
+                              '${type}',
+                              '${brand}',
+                              '${number}',
+                              '${color}',
+                              '${size}',
+                              '${weight}',
+                              '${partner}',
+                              '${note}'
+                            )
+                          `, [], (t, res) => {
+                          // save สำเร็จ
+                          console.log('res insert accessories : ', res)
+                          let fn = this.props.navigation.getParam('refresh', 'none')
+                          fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                          this.props.navigation.navigate('Addasset', { comeFrom: 'accessories' })
+                        })
+                    })
+
+                    //   tx.executeSql(
+                    //     `INSERT INTO vehicles (type, brand, number, tabain, date, province, ownershicolor, partner, note) 
+                    //            VALUES ('${type}', '${brand}', '${number}', '${tabain}','${date}', '${province}', '${ownershicolor}', '${partner}', '${note}')`,
+                    //     [],(tx, result) => {
+                    //       console.log('create table result : ', result.rowsAffected);
+                    //       if (result.rowsAffected > 0) {
+                    //         Alert.alert(
+                    //           'บันทึกสำเร็จ',
+                    //           [
+                    //             {
+                    //               text: 'ตกลง',
+                    //               onPress: () => that.props.navigation.navigate('Addasset'),
+                    //             },
+                    //           ],
+                    //           { cancelable: false }
+                    //         );
+                    //       } else {
+                    //         alert('ล้มเหลว');
+                    //       }
+
+                    //     })
+                    // }
+                    // );
+                  } else {
+                    alert('กรุณากรอก Note')
+                  }
+                } else {
+                  alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+                }
+              } else {
+                alert('กรุณากรอกน้ำหนัก')
+              }
+            } else {
+              alert('กรุณากรอกขนาด')
+            }
+          } else {
+            alert('กรุณากรอกสี')
+          }
+        } else {
+          alert('กรุณากรอกรุ่น')
+        }
+      } else {
+        alert('กรุณากรอกยี่ห้อ')
+      }
+    }
+  };
   render() {
     return (
       <Container>
@@ -76,11 +176,10 @@ export default class Accessories extends Component {
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
-              placeholder="Select your SIM"
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
               style={{ width: undefined }}
-              selectedValue={this.state.selected}
+              selectedValue={this.state.type}
               onValueChange={this.onValueChange.bind(this)}
             >
               <Picker.Item label="สร้อย" value="สร้อย" />
@@ -92,42 +191,49 @@ export default class Accessories extends Component {
           <View style={styles.displayRow}>
             <Mytext text='ยี่ห้อ' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ brand: text }) }}
               placeholder="ระบุยี่ห้อ "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='รุ่น' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ number: text }) }}
               placeholder="ระบุรุ่น "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='สี' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ color: text }) }}
               placeholder="ระบุสี "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ขนาด' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ size: text }) }}
               placeholder="ระบุขนาด "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='น้ำหนัก' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ weight: text }) }}
               placeholder="ระบุน้ำหนัก "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ชื่อผู้ถือทรัพย์สินร่วม' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ partner: text }) }}
               placeholder="ระบุชื่อผู้ถือทรัพย์สินร่วม "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='Note' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ note: text }) }}
               placeholder="ระบุข้อความเพิ่มเติม "
             />
           </View>
@@ -151,7 +257,9 @@ export default class Accessories extends Component {
         </View> */}
 
         </ScrollView>
-        <Button full danger>
+        <Button
+          onPress={this.Save}
+          full danger>
           <Text style={{ color: 'white' }}>Save</Text>
         </Button>
 

@@ -14,7 +14,7 @@ const Mytextinput = props => {
       <TextInput
         underlineColorAndroid="transparent"
         placeholder={props.placeholder}
-        placeholderTextColor = "#eb4d4b"
+        placeholderTextColor="#eb4d4b"
         onChangeText={props.onChangeText}
         style={props.style}
       />

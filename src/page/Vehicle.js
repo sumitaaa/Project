@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, TextInput, Modal, Dimensions, Alert, ScrollView } from 'react-native';
 import { Container, Header, Title, Button, Icon, Form, Left, Right, Body, Content, Picker } from 'native-base';
-import Mytext from '../components/Mytext'
+import Mytext from '../components/Mytext';
 import Mytextinput from '../components/Mytextinput';
 import SQLite from 'react-native-sqlite-storage'
-import { thisTypeAnnotation } from '@babel/types';
 
 const { height, width } = Dimensions.get('window')
-var db = SQLite.openDatabase({ name: 'myB.db' });
+var db = SQLite.openDatabase({ name: 'DB.db' });
 export default class Vehicle extends Component {
   constructor(props) {
     super(props);
@@ -37,10 +36,13 @@ export default class Vehicle extends Component {
       type: value
     });
   }
+
+
   Save = () => {
     const { type, brand, number, color, tabain, date,
       province, ownership, partner, note } = this.state
     console.log(type, brand, number, color, tabain, date, province, ownership, partner, note)
+    console.log('is Saved Vehicle')
     if (type) {
       if (brand) {
         if (number) {
@@ -51,37 +53,71 @@ export default class Vehicle extends Component {
                   if (ownership) {
                     if (partner) {
                       if (note) {
-                        db.transaction(function (tx) {
-                          tx.executeSql(`CREATE TABLE IF NOT EXISTS vehicle(ID int, type VARCHAR(30), 
-                              brand VARCHAR(30), number VARCHAR(30), color VARCHAR(20), tabain VARCHAR(10),
-                              date VARCHAR(50), province VARCHAR(30), ownership VARCHAR(60), 
-                              partner VARCHAR(60), note VARCHAR(100) )`,
-                            [type, brand, number, color, tabain, date, province, ownership, partner, note],
-                            (tx, result) => {
-                              console.log('create table result : ', result.rowsAffected);
-                              if (result.rowsAffected > 0) {
-                                Alert.alert(
-                                  'บันทึกสำเร็จ',
-                                  [
-                                    {
-                                      text: 'ตกลง',
-                                      onPress: () => that.props.navigation.navigate('Addasset'),
-                                    },
-                                  ],
-                                  { cancelable: false }
-                                );
-                              } else {
-                                alert('ล้มเหลว');
-                              }
-                              // this.props.navigation.navigate('Addasset')
-                              // }, (e) => {
-                              //   console.log('error create table: ', e)
-                            }
-                          );
+                        console.log('is กรอกครบ Saved Vehicle')
 
-                        });
+                        db.transaction((tx) => {
+                          tx.executeSql(`
+                            INSERT INTO vehicles (
+                              type,
+                              brand,
+                              number,
+                              color,
+                              tabain,
+                              date,
+                              province,
+                              ownership,
+                              partner,
+                              note
+                            )
+                            VALUES (
+                              '${type}',
+                              '${brand}',
+                              '${number}',
+                              '${color}',
+                              '${tabain}',
+                              '${date}',
+                              '${province}',
+                              '${ownership}',
+                              '${partner}',
+                              '${note}'
+                            )
+                          `, [], (t, res) => {
+                              // save สำเร็จ
+                              console.log('res insert vehicle : ', res)
+                              let fn = this.props.navigation.getParam('refresh', 'none')
+                              fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                              this.props.navigation.navigate('Addasset', { comeFrom: 'car' })
+                            })
+                        })
 
+                        //   tx.executeSql(
+                        //     `INSERT INTO vehicles (type, brand, number, tabain, date, province, ownershicolor, partner, note) 
+                        //            VALUES ('${type}', '${brand}', '${number}', '${tabain}','${date}', '${province}', '${ownershicolor}', '${partner}', '${note}')`,
+                        //     [],(tx, result) => {
+                        //       console.log('create table result : ', result.rowsAffected);
+                        //       if (result.rowsAffected > 0) {
+                        //         Alert.alert(
+                        //           'บันทึกสำเร็จ',
+                        //           [
+                        //             {
+                        //               text: 'ตกลง',
+                        //               onPress: () => that.props.navigation.navigate('Addasset'),
+                        //             },
+                        //           ],
+                        //           { cancelable: false }
+                        //         );
+                        //       } else {
+                        //         alert('ล้มเหลว');
+                        //       }
+
+                        //     })
+                        // }
+                        // );
+                      } else {
+                        alert('กรุณากรอก Note')
                       }
+                    } else {
+                      alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
                     }
                   } else {
                     alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
@@ -166,7 +202,8 @@ export default class Vehicle extends Component {
             <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
           <Right>
-            <Button onPress={() => { this.setState({ modalVisible: true }) }} primary>
+            <Button
+              onPress={() => { this.setState({ modalVisible: true }) }} primary>
               <Icon type='Entypo' name='export' />
               <Text style={{ color: 'white', padding: 15 }}>ถ่ายโอน</Text>
             </Button>
@@ -222,7 +259,7 @@ export default class Vehicle extends Component {
             <Mytext text='วันจดทะเบียน' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ date: text }) }}
-              placeholder="ระบุวันจดทะเบียน "
+              placeholder="วว/ดด/ปป"
             />
           </View>
           <View style={styles.displayRow}>
@@ -253,6 +290,7 @@ export default class Vehicle extends Component {
               placeholder="ระบุข้อความเพิ่มเติม "
             />
           </View>
+
           {/* <View style={styles.displayRow}>
           <Text style={styles.textRow}>กำหนดการแจ้งเตือน</Text>
           <DatePicker
@@ -273,6 +311,7 @@ export default class Vehicle extends Component {
         </View> */}
 
         </ScrollView>
+
         <Button
           onPress={this.Save}
           full danger>
