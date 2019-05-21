@@ -86,7 +86,6 @@ export default class Home extends Component {
         date VARCHAR(50),
         insurance VARCHAR(30),
         store VARCHAR(30),
-        owner VARCHAR(60), 
         partner VARCHAR(60),
         note VARCHAR(100)
       )`,
@@ -100,7 +99,7 @@ export default class Home extends Component {
         number VARCHAR(30),
         width VARCHAR(30),
         long VARCHAR(30),
-        owner VARCHAR(30),
+        ownership VARCHAR(30),
         partner VARCHAR(30),
         note VARCHAR(30)
         )`,
@@ -152,6 +151,9 @@ export default class Home extends Component {
           </Body>
 
           <Right>
+            <Button transparent>
+              <Icon type='MaterialCommunityIcons' name='cloud-download' />
+            </Button>
             <Button transparent>
               <Icon type='Ionicons' name='md-notifications-outline' />
             </Button>

@@ -3,8 +3,10 @@ import { Text, StyleSheet, View, Modal, Dimensions, TouchableOpacity, ScrollView
 import { Container, Header, Title, Button, Icon, Form, Left, Right, Body, Content, Picker } from "native-base";
 import Mytext from '../components/Mytext'
 import Mytextinput from '../components/Mytextinput';
+import SQLite from 'react-native-sqlite-storage'
 
 const { height, width } = Dimensions.get('window')
+var db = SQLite.openDatabase({ name: 'DB.db' });
 
 export default class Home2 extends Component {
   constructor(props) {
@@ -12,7 +14,15 @@ export default class Home2 extends Component {
     this.state = {
       chosenDate: new Date(),
       modalVisible: false,
-      selected: undefined
+
+
+      type: 'โฉนดที่ดิน',
+      number: '',
+      width: '',
+      long: '',
+      ownership: '',
+      partner: '',
+      note: ''
     };
     this.setDate = this.setDate.bind(this);
   }
@@ -25,9 +35,73 @@ export default class Home2 extends Component {
   }
   onValueChange(value) {
     this.setState({
-      selected: value
+      type: value
     });
   }
+
+
+  Save = () => {
+    const { type, number, width, long, ownership, partner, note } = this.state
+    console.log(type, number, width, long, ownership, partner, note)
+    console.log('is Saved home2')
+    if (type) {
+      if (number) {
+        if (width) {
+          if (long) {
+            if (ownership) {
+              if (partner) {
+                if (note) {
+                  console.log('is กรอกครบ Saved home2')
+
+                  db.transaction((tx) => {
+                    tx.executeSql(`
+                            INSERT INTO home (
+                              type,
+                              number,
+                              width,
+                              long,
+                              ownership,
+                              partner,
+                              note
+                            )
+                            VALUES (
+                              '${type}',
+                              '${number}',
+                              '${width}',
+                              '${long}',
+                              '${ownership}',
+                              '${partner}',
+                              '${note}'
+                            )
+                          `, [], (t, res) => {
+                        // save สำเร็จ
+                        console.log('res insert home2 : ', res)
+                        let fn = this.props.navigation.getParam('refresh', 'none')
+                        fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                        this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
+                      })
+                  })
+
+                } else {
+                  alert('กรุณากรอก Note')
+                }
+              } else {
+                alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+              }
+            } else {
+              alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
+            }
+          } else {
+            alert('กรุณากรอกความยาว')
+          }
+        } else {
+          alert('กรุณากรอกความกว้าง')
+        }
+      } else {
+        alert('กรุณากรอกรุ่น')
+      }
+    }
+  };
   render() {
     return (
       <Container>
@@ -78,7 +152,7 @@ export default class Home2 extends Component {
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
               style={{ width: undefined }}
-              selectedValue={this.state.selected}
+              selectedValue={this.state.type}
               onValueChange={this.onValueChange.bind(this)}
             >
               <Picker.Item label="บ้าน" value="บ้าน" />
@@ -89,36 +163,42 @@ export default class Home2 extends Component {
           <View style={styles.displayRow}>
             <Mytext text='เลขที่โฉนด' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ number: text }) }}
               placeholder="ระบุเลขที่โฉนด "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ความกว้าง' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ width: text }) }}
               placeholder="ระบุความกว้าง "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ความยาว' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ long: text }) }}
               placeholder="ระบุความยาว "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ชื่อผู้ถือกรรมสิทธิ์' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ ownership: text }) }}
               placeholder="ระบุชื่อผู้ถือกรรมสิทธิ์ "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ชื่อผู้ถือทรัพย์สินร่วม' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ partner: text }) }}
               placeholder="ระบุชื่อผู้ถือทรัพย์สินร่วม "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='Note' />
             <Mytextinput
+              onChangeText={(text) => { this.setState({ note: text }) }}
               placeholder="ระบุข้อความเพิ่มเติม "
             />
           </View>
@@ -142,7 +222,9 @@ export default class Home2 extends Component {
         </View> */}
 
         </ScrollView >
-        <Button full danger>
+        <Button
+          onPress={this.Save}
+          full danger>
           <Text style={{ color: 'white' }}>Save</Text>
         </Button>
 

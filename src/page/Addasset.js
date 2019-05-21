@@ -29,13 +29,40 @@ const Item2 = ({ id, type, brand, number, color, size, weight, partner, note }) 
   }}>
     <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}           : {size}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}        ขนาด : {size}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>น้ำหนัก: {weight}      </Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
-
+const Item3 = ({ id, type, brand, number, color, date, insurance, store, partner, note }) => (
+  <View style={{
+    marginVertical: 5,
+    fontWeight: 'bold',
+    backgroundColor: '#ffe6e6',
+    borderRadius: 20
+  }}>
+    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}         วันที่ซื้อ : {date}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>วันหมดประกัน: {insurance}      ร้านที่ซื้อ : {store}   </Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+  </View>
+)
+const Item4 = ({ id, type, number, width, long, ownership, partner, note }) => (
+  <View style={{
+    marginVertical: 5,
+    fontWeight: 'bold',
+    backgroundColor: '#ffe6e6',
+    borderRadius: 20
+  }}>
+    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         ความกว้าง : {width}          ความยาว : {long}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+  </View>
+)
 
 export default class Addasset extends Component {
 
@@ -58,11 +85,7 @@ export default class Addasset extends Component {
       this.props.navigation.navigate('Accessories', { refresh: () => { this.componentDidMount() } })
     } else if (comeFrom === 'electornic') {
       this.props.navigation.navigate('Electornic', { refresh: () => { this.componentDidMount() } })
-    }
-    // else if (comeFrom === 'com') {
-    //   this.props.navigation.navigate('Electornic', { refresh: () => { this.componentDidMount() } })
-    // } 
-    else if (comeFrom === 'home') {
+    } else if (comeFrom === 'home') {
       this.props.navigation.navigate('Home2', { refresh: () => { this.componentDidMount() } })
     }
   }
@@ -172,7 +195,7 @@ export default class Addasset extends Component {
                     province={e.province}
                     ownership={e.ownership}
                     partner={e.partner}
-                    node={e.node}
+                    note={e.note}
                   />
                 } else if (comeFrom === 'accessories') {
                   return <Item2
@@ -185,10 +208,39 @@ export default class Addasset extends Component {
                     size={e.size}
                     weight={e.weight}
                     partner={e.partner}
-                    node={e.node}
+                    note={e.note}
+                  />
+
+                } else if (comeFrom === 'electornic') {
+                  return <Item3
+                    key={i}
+                    id={e.electornicID}
+                    type={e.type}
+                    brand={e.brand}
+                    number={e.number}
+                    color={e.color}
+                    date={e.date}
+                    insurance={e.insurancet}
+                    store={e.store}
+                    partner={e.partner}
+                    note={e.note}
+                  />
+
+                } else if (comeFrom === 'home') {
+                  return <Item4
+                    key={i}
+                    id={e.homeID}
+                    type={e.type}
+                    number={e.number}
+                    width={e.width}
+                    long={e.long}
+                    ownership={e.ownership}
+                    partner={e.partner}
+                    note={e.note}
                   />
 
                 }
+
               })
           }
 

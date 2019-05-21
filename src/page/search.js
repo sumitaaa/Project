@@ -30,7 +30,7 @@ const MyItem1 = ({ note, ownership, province, brand, type,
             <Text style={styles.text}>Note : {note}</Text>
         </View>
     )
-const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, ownership, accessoriesID }) => (
+const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, accessoriesID }) => (
     <View style={{
         marginVertical: 5,
         fontWeight: 'bold',
@@ -53,9 +53,7 @@ const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, owne
 )
 
 
-
-
-export default class SearchTEST extends Component {
+export default class search extends Component {
 
     constructor(props) {
         super(props)
@@ -69,6 +67,8 @@ export default class SearchTEST extends Component {
 
     search = () => {
         console.log(this.state.type);
+        // let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+        // if (comeFrom === 'car') {
         db.transaction(tx => {
             tx.executeSql(
                 `SELECT * FROM vehicles where type = '${this.state.type}'`,
@@ -83,6 +83,24 @@ export default class SearchTEST extends Component {
                 }
             );
         });
+        // } else if (comeFrom === 'accessories') {
+        //     db.transaction(tx => {
+        //         tx.executeSql(
+        //             `SELECT * FROM accessories where type = '${this.state.type}'`,
+        //             [],
+        //             (tx, results) => {
+        //                 var len = results.rows.length;
+        //                 let items = []
+        //                 for (let i = 0; i < len; i++) {
+        //                     items.push(results.rows.item(i))
+        //                 }
+        //                 this.setState({ items: items })
+        //             }
+        //         );
+        //     });
+
+
+        // }
     };
 
 
@@ -126,39 +144,38 @@ export default class SearchTEST extends Component {
                 </TouchableOpacity>
 
                 {
-                    this.state.items.length > 0 ? this.state.items.map((e, i) => (
-                        // let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
-                        // if (comeFrom === 'car') {
+                    this.state.items.length > 0 ? this.state.items.map((e, i) => {
+                        let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+                        if (comeFrom === 'car') {
+                            return <MyItem1 key={i}
+                                note={e.note}
+                                ownership={e.ownership}
+                                province={e.province}
+                                brand={e.brand}
+                                type={e.type}
+                                partner={e.partner}
+                                date={e.date}
+                                tabain={e.tabain}
+                                color={e.color}
+                                number={e.number}
+                                vehicleID={e.vehicleID}
+                            />
+                        } else if (comeFrom === 'accessories') {
+                            return <MyItem2
+                                key={i}
+                                accessoriesID={e.accessoriesID}
+                                type={e.type}
+                                brand={e.brand}
+                                number={e.number}
+                                color={e.color}
+                                size={e.size}
+                                weight={e.weight}
+                                partner={e.partner}
+                                node={e.node}
+                            />
 
-                        <MyItem1 key={i}
-                            note={e.note}
-                            ownership={e.ownership}
-                            province={e.province}
-                            brand={e.brand}
-                            type={e.type}
-                            partner={e.partner}
-                            date={e.date}
-                            tabain={e.tabain}
-                            color={e.color}
-                            number={e.number}
-                            vehicleID={e.vehicleID}
-                        />
-                        // } else if (comeFrom === 'accessories') {
-                        //     return <MyItem2
-                        //         key={i}
-                        //         id={e.accessoriesID}
-                        //         type={e.type}
-                        //         brand={e.brand}
-                        //         number={e.number}
-                        //         color={e.color}
-                        //         size={e.size}
-                        //         weight={e.weight}
-                        //         partner={e.partner}
-                        //         node={e.node}
-                        //     />
-
-                        //}
-                    )) : <View style={{ width: '100%' }}>
+                        }
+                    }) : <View style={{ width: '100%' }}>
                             <Text style={{ fontSize: 24, textAlign: 'center', marginTop: 100 }}>ไม่พบข้อมูล</Text>
                         </View>
                 }
