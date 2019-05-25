@@ -16,6 +16,80 @@ export default class Home extends Component {
     };
     this.setDate = this.setDate.bind(this);
   }
+
+  saveBackup = () => {
+    let url = "http://172.16.186.240:3000/post-backup"
+
+    let jsonData = {}
+
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM user`,
+        [], (tw, r) => {
+          let user = []
+          for (let i = 0; i < r.rows.length; i++) {
+            let rowData = r.rows.item(i)
+            user.push(rowData)
+          }
+          jsonData.user = user
+
+          tx.executeSql(`SELECT * FROM vehicles`,
+            [], (tw, r) => {
+              let vehicles = []
+              for (let i = 0; i < r.rows.length; i++) {
+                let rowData = r.rows.item(i)
+                vehicles.push(rowData)
+              }
+              jsonData.vehicles = vehicles
+
+              tx.executeSql(`SELECT * FROM accessories`,
+                [], (tw, r) => {
+                  let accessories = []
+                  for (let i = 0; i < r.rows.length; i++) {
+                    let rowData = r.rows.item(i)
+                    accessories.push(rowData)
+                  }
+                  jsonData.accessories = accessories
+                  tx.executeSql(`SELECT * FROM electornic`,
+                    [], (tw, r) => {
+                      let electornic = []
+                      for (let i = 0; i < r.rows.length; i++) {
+                        let rowData = r.rows.item(i)
+                        electornic.push(rowData)
+                      }
+                      jsonData.electornic = electornic
+
+                      tx.executeSql(`SELECT * FROM home`,
+                        [], (tw, r) => {
+                          let home = []
+                          for (let i = 0; i < r.rows.length; i++) {
+                            let rowData = r.rows.item(i)
+                            home.push(rowData)
+                          }
+                          jsonData.home = home
+
+                          console.log('jsonData : ', jsonData)
+                        })
+                    })
+                })
+            })
+        })
+    })
+
+    let data = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData)
+    }
+    fetch(url, data)
+      .then(response => {
+        console.log('response is : ', response)
+      })
+      .catch(error => console.error(error));
+  }
+
   componentDidMount() {
 
     // ลบ data base
@@ -63,9 +137,9 @@ export default class Home extends Component {
       tx.executeSql(`CREATE TABLE IF NOT EXISTS accessories (
           accessoriesID INTEGER PRIMARY KEY AUTOINCREMENT, 
           type VARCHAR(30),
-          brand VARCHAR(30),
-          number VARCHAR(30),
+          brand VARCHAR(30),,
           color VARCHAR(20),
+          number VARCHAR(30)
           size FLOAT(10),
           weight FLOAT(50), 
           ownership VARCHAR(60), 
@@ -86,6 +160,7 @@ export default class Home extends Component {
         date VARCHAR(50),
         insurance VARCHAR(30),
         store VARCHAR(30),
+        owner VARCHAR(60), 
         partner VARCHAR(60),
         note VARCHAR(100)
       )`,
@@ -96,13 +171,38 @@ export default class Home extends Component {
       tx.executeSql(`CREATE TABLE IF NOT EXISTS home (
         homeID INTEGER PRIMARY KEY AUTOINCREMENT, 
         type VARCHAR(30),
+        name VARCHAR(30),
         number VARCHAR(30),
-        width VARCHAR(30),
-        long VARCHAR(30),
+        district VARCHAR(30),
+        province VARCHAR(30),
+        area VARCHAR(30),
+        date VARCHAR(50),
         ownership VARCHAR(30),
-        partner VARCHAR(30),
         note VARCHAR(30)
         )`,
+        [], (tx, result) => {
+          console.log('create table electornic result : ', result);
+        })
+      tx.executeSql(`CREATE TABLE IF NOT EXISTS condo (
+          condoID INTEGER PRIMARY KEY AUTOINCREMENT, 
+          type VARCHAR(30),
+          number VARCHAR(30),
+          list VARCHAR(30),
+          typeasset VARCHAR(30),
+          nature VARCHAR(30),
+          ownership VARCHAR(30),
+          note VARCHAR(30)
+          )`,
+        [], (tx, result) => {
+          console.log('create table electornic result : ', result);
+        })
+      tx.executeSql(`CREATE TABLE IF NOT EXISTS flax (
+            flaxID INTEGER PRIMARY KEY AUTOINCREMENT, 
+            type VARCHAR(30),
+            name VARCHAR(30),
+            number VARCHAR(30),
+            note VARCHAR(30)
+            )`,
         [], (tx, result) => {
           console.log('create table electornic result : ', result);
         })
@@ -149,9 +249,12 @@ export default class Home extends Component {
           <Body style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Title style={{ fontSize: 25 }}>หน้าหลัก</Title>
           </Body>
-
           <Right>
-            <Button transparent>
+            <Button
+              onPress={() => {
+                this.saveBackup()
+              }}
+              transparent>
               <Icon type='MaterialCommunityIcons' name='cloud-download' />
             </Button>
             <Button transparent>

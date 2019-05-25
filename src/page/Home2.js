@@ -15,23 +15,35 @@ export default class Home2 extends Component {
       chosenDate: new Date(),
       modalVisible: false,
 
-
-      type: 'โฉนดที่ดิน',
+      department: '',
+      selectedTab: 0,
+      value: '',
+      type: 'ที่ดิน',
+      name: 'น.ส.2',
       number: '',
-      width: '',
-      long: '',
+      district: '',
+      province: '',
+      area: '',
+      date: '',
       ownership: '',
-      partner: '',
       note: ''
     };
     this.setDate = this.setDate.bind(this);
   }
-
+  setTab = selectedTab => {
+    this.setState({ selectedTab });
+  }
+  updateDepartment = (department) => {  // updateDepartment รับตัวแปลมาจาก department
+    this.setState({ department: department })
+  }
 
 
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
     //#ffd32a
+  }
+  updateValue = (itemValue, itemIndex) => {
+    this.setState({ value: itemValue })
   }
   onValueChange(value) {
     this.setState({
@@ -41,8 +53,8 @@ export default class Home2 extends Component {
 
 
   Save = () => {
-    const { type, number, width, long, ownership, partner, note } = this.state
-    console.log(type, number, width, long, ownership, partner, note)
+    const { type, number, value, name, district, province, area, date, ownership, note } = this.state
+    console.log(type, number, value, name, district, province, area, date, ownership, note)
     console.log('is Saved home2')
     if (type) {
       if (number) {
@@ -143,23 +155,43 @@ export default class Home2 extends Component {
             </Button>
           </Right>
         </Header>
+        <Header>
+          <Button vertical>
+            <Icon name="flag" />
+            <Text style={{ color: 'white' }}>ที่ดิน</Text>
+          </Button>
+          <Button
+            onPress={() => { this.props.navigation.navigate('condo') }}
+            vertical >
+            <Icon active name="home" />
+            <Text style={{ color: 'white' }}>ทรัพย์สินบนที่ดิน</Text>
+          </Button>
+          <Button
+            onPress={() => { this.props.navigation.navigate('flax') }}
+            vertical>
+            <Icon name="cash" />
+            <Text style={{ color: 'white' }}>ภาษี</Text>
+          </Button>
+        </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
-          <Form>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              placeholder="Select your SIM"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              style={{ width: undefined }}
-              selectedValue={this.state.type}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="บ้าน" value="บ้าน" />
-              <Picker.Item label="ที่ดิน" value="ที่ดิน" />
-              <Picker.Item label="โฉนดที่ดิน" value="โฉนดที่ดิน" />
-            </Picker>
-          </Form>
+          <Picker
+            selectedValue={this.state.department}
+            onValueChange={this.updateDepartment}>
+
+            <Picker.Item label="น.ส.2" value="น.ส.2" />
+            <Picker.Item label="น.ส.3" value="น.ส.3" />
+            <Picker.Item label="น.ส.3 ก" value="น.ส.3 ก" />
+            <Picker.Item label="น.ส.3 ข" value="น.ส.3 ข" />
+            <Picker.Item label="น.ส.4" value="น.ส.4" />
+            <Picker.Item label="น.ส.5" value="น.ส.5" />
+            <Picker.Item label="น.ค.3" value="น.ค.3" />
+            <Picker.Item label="ส.ค.1" value="ส.ค.1" />
+            <Picker.Item label="ส.ท.ก" value="ส.ท.ก" />
+            <Picker.Item label="ส.ป.ก" value="ส.ป.ก" />
+            <Picker.Item label="ภ.บ.ท.5" value="ภ.บ.ท.5" />
+            <Picker.Item label="อื่นๆ" value="อื่นๆ" />
+          </Picker>
+
           <View style={styles.displayRow}>
             <Mytext text='เลขที่โฉนด' />
             <Mytextinput
@@ -168,31 +200,38 @@ export default class Home2 extends Component {
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='ความกว้าง' />
+            <Mytext text='อำเภอ' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ width: text }) }}
-              placeholder="ระบุความกว้าง "
+              placeholder="ระบุอำเภอ "
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='ความยาว' />
+            <Mytext text='จังหวัด' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ long: text }) }}
-              placeholder="ระบุความยาว "
+              placeholder="ระบุจังหวัด "
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='ชื่อผู้ถือกรรมสิทธิ์' />
+            <Mytext text='เนื้อที่(ตารางวา)' />
+            <Mytextinput
+              onChangeText={(text) => { this.setState({ long: text }) }}
+              placeholder="ระบุเนื้อที่(ตารางวา)"
+            />
+          </View>
+          <View style={styles.displayRow}>
+            <Mytext text='วันที่ออกโฉนด' />
+            <Mytextinput
+              onChangeText={(text) => { this.setState({ long: text }) }}
+              placeholder="ระบุวันที่ออกโฉนด"
+            />
+          </View>
+          <View style={styles.displayRow}>
+            <Mytext text='ชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ ownership: text }) }}
-              placeholder="ระบุชื่อผู้ถือกรรมสิทธิ์ "
-            />
-          </View>
-          <View style={styles.displayRow}>
-            <Mytext text='ชื่อผู้ถือทรัพย์สินร่วม' />
-            <Mytextinput
-              onChangeText={(text) => { this.setState({ partner: text }) }}
-              placeholder="ระบุชื่อผู้ถือทรัพย์สินร่วม "
+              placeholder="ระบุชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน "
             />
           </View>
           <View style={styles.displayRow}>

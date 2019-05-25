@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, FlatList, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, FlatList, ScrollView, Modal, Dimensions } from 'react-native'
 import { Container, Header, Title, Button, Icon, Left, Right, Body, Fab } from "native-base";
 import SQLite from 'react-native-sqlite-storage'
 
 var db = SQLite.openDatabase({ name: 'DB.db' });
+const { height, width } = Dimensions.get('window')
 
 const Item1 = ({ id, type, brand, number, color, tabain, date, province, ownership, partner, note }) => (
   <View style={{
@@ -35,7 +36,7 @@ const Item2 = ({ id, type, brand, number, color, size, weight, partner, note }) 
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
-const Item3 = ({ id, type, brand, number, color, date, insurance, store, partner, note }) => (
+const Item3 = ({ id, type, name, brand, number, color, date, insurance, store, owner, partner, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
@@ -43,10 +44,10 @@ const Item3 = ({ id, type, brand, number, color, date, insurance, store, partner
     borderRadius: 20
   }}>
     <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ชื่อ : {name}            ยี่ห้อ : {brand}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}         วันที่ซื้อ : {date}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>วันหมดประกัน: {insurance}      ร้านที่ซื้อ : {store}   </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {owner}     ผู้ถือทรัพย์สินร่วม : {partner}</Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
@@ -70,11 +71,90 @@ export default class Addasset extends Component {
     super(props)
 
     this.state = {
+      chosenDate: new Date(),
+      modalVisible: false,
       dataArray: [],
       active: 'true',
       items: [],
     };
+    this.setDate = this.setDate.bind(this);
+  }
+  saveBackup = () => {
+    let url = "http://172.16.186.240:3000/post-backup"
 
+    let jsonData = {}
+
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM user`,
+        [], (tw, r) => {
+          let user = []
+          for (let i = 0; i < r.rows.length; i++) {
+            let rowData = r.rows.item(i)
+            user.push(rowData)
+          }
+          jsonData.user = user
+
+          tx.executeSql(`SELECT * FROM vehicles`,
+            [], (tw, r) => {
+              let vehicles = []
+              for (let i = 0; i < r.rows.length; i++) {
+                let rowData = r.rows.item(i)
+                vehicles.push(rowData)
+              }
+              jsonData.vehicles = vehicles
+
+              tx.executeSql(`SELECT * FROM accessories`,
+                [], (tw, r) => {
+                  let accessories = []
+                  for (let i = 0; i < r.rows.length; i++) {
+                    let rowData = r.rows.item(i)
+                    accessories.push(rowData)
+                  }
+                  jsonData.accessories = accessories
+                  tx.executeSql(`SELECT * FROM electornic`,
+                    [], (tw, r) => {
+                      let electornic = []
+                      for (let i = 0; i < r.rows.length; i++) {
+                        let rowData = r.rows.item(i)
+                        electornic.push(rowData)
+                      }
+                      jsonData.electornic = electornic
+
+                      tx.executeSql(`SELECT * FROM home`,
+                        [], (tw, r) => {
+                          let home = []
+                          for (let i = 0; i < r.rows.length; i++) {
+                            let rowData = r.rows.item(i)
+                            home.push(rowData)
+                          }
+                          jsonData.home = home
+
+                          console.log('jsonData : ', jsonData)
+                        })
+                    })
+                })
+            })
+        })
+    })
+
+    let data = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData)
+    }
+    fetch(url, data)
+      .then(response => {
+        console.log('response is : ', response)
+      })
+      .catch(error => console.error(error));
+  }
+
+  setDate(newDate) {
+    this.setState({ chosenDate: newDate });
+    //#ffd32a
   }
 
   ChangePage = () => {
@@ -151,6 +231,23 @@ export default class Addasset extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        {/* <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          presentationStyle="formSheet"
+          containerStyle={{ backgroundColor: 'red' }}
+        >
+          <View style={{ flex: 1, backgroundColor: '#00000070' }}>
+            <View style={{ width: 350, height: 500, marginTop: (height - 500) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
+              <Right>
+                <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
+                  <Icon type='AntDesign' name='close' />
+                </Button>
+              </Right>
+            </View>
+          </View>
+        </Modal> */}
         <Header
           noShadow
           style={{ backgroundColor: '#eb4d4b' }}>
@@ -164,6 +261,13 @@ export default class Addasset extends Component {
           <Body>
             <Title>เพิ่มข้อมูลทรัพย์สิน</Title>
           </Body>
+          {/* <Right>
+            <Button style={{ marginLeft: 70 }}
+              onPress={() => { this.setState({ modalVisible: true }) }} primary>
+              <Icon type='Entypo' name='export' />
+              <Text style={{ color: 'white', padding: 12 }}>ถ่ายโอน</Text>
+            </Button>
+          </Right> */}
           <Right>
             <Button
               onPress={() => {
@@ -215,13 +319,15 @@ export default class Addasset extends Component {
                   return <Item3
                     key={i}
                     id={e.electornicID}
+                    name={e.name}
                     type={e.type}
                     brand={e.brand}
                     number={e.number}
                     color={e.color}
                     date={e.date}
-                    insurance={e.insurancet}
+                    insurance={e.insurance}
                     store={e.store}
+                    owner={e.owner}
                     partner={e.partner}
                     note={e.note}
                   />

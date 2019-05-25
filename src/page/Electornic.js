@@ -14,18 +14,21 @@ export default class Electornic extends Component {
     this.state = {
       chosenDate: new Date(),
       modalVisible: false,
-      selected: undefined,
 
 
-      type: 'Harddisk',
+      value: '',
+      type: 'call',
+      name: 'harddisk',
       brand: '',
       number: '',
       color: '',
       date: '',
       insurance: '',
       store: '',
+      owner: '',
       partner: '',
       note: ''
+
 
     };
     this.setDate = this.setDate.bind(this);
@@ -37,86 +40,222 @@ export default class Electornic extends Component {
     this.setState({ chosenDate: newDate });
     //#ffd32a
   }
+  updateValue = (itemValue, itemIndex) => {
+    this.setState({ value: itemValue })
+  }
   onValueChange(value) {
     this.setState({
       type: value
     });
   }
   Save = () => {
-    const { type, brand, number, color, date, insurance, store, partner, note } = this.state
-    console.log(type, brand, number, color, date, insurance, store, partner, note)
+    const { type, value, brand, number, color, date, insurance, store, owner, partner, note } = this.state
+    console.log(type, value, brand, number, color, date, insurance, store, owner, partner, note)
     console.log('is Saved electornic')
     if (type) {
-      if (brand) {
-        if (number) {
-          if (color) {
-            if (date) {
-              if (insurance) {
-                if (store) {
-                  if (partner) {
-                    if (note) {
-                      console.log('is กรอกครบ Saved electornic')
+      if (value) {
+        if (brand) {
+          if (number) {
+            if (color) {
+              if (date) {
+                if (insurance) {
+                  if (store) {
+                    if (owner) {
+                      if (partner) {
+                        if (note) {
+                          console.log('is กรอกครบ Saved electornic')
 
-                      db.transaction((tx) => {
-                        tx.executeSql(`
+                          db.transaction((tx) => {
+                            tx.executeSql(`
                             INSERT INTO electornic (
                               type,
+                              name,
                               brand,
                               number,
                               color,
                               date,
                               insurance,
                               store,
+                              owner,
                               partner,
                               note
+
                             )
                             VALUES (
                               '${type}',
+                              '${value}',
                               '${brand}',
                               '${number}',
                               '${color}',
                               '${date}',
                               '${insurance}',
                               '${store}',
+                              '${owner}',
                               '${partner}',
                               '${note}'
+
                             )
                           `, [], (t, res) => {
-                            // save สำเร็จ
-                            console.log('res insert electornic : ', res)
-                            let fn = this.props.navigation.getParam('refresh', 'none')
-                            fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                            this.props.navigation.navigate('Addasset', { comeFrom: 'electornic' })
+                                // save สำเร็จ
+                                console.log('res insert electornic : ', res)
+                                let fn = this.props.navigation.getParam('refresh', 'none')
+                                fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                                this.props.navigation.navigate('Addasset', { comeFrom: 'electornic' })
+                              })
                           })
-                      })
 
+                        } else {
+                          alert('กรุณากรอก Note')
+                        }
+                      } else {
+                        alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+                      }
                     } else {
-                      alert('กรุณากรอก Note')
+                      alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
                     }
                   } else {
-                    alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+                    alert('กรุณากรอกชื่อร้าน')
                   }
                 } else {
-                  alert('กรุณากรอกร้านที่ซื้อ')
+                  alert('กรุณากรอกวันหมดประกัน')
                 }
               } else {
-                alert('กรุณากรอกวันหมดประกัน')
+                alert('กรุณากรอกวันที่ซื้อ')
               }
             } else {
-              alert('กรุณากรอกวันที่ซื้อ')
+              alert('กรุณากรอกสี')
             }
           } else {
-            alert('กรุณากรอกสี')
+            alert('กรุณากรอกรุ่น')
           }
         } else {
-          alert('กรุณากรอกรุ่น')
+          alert('กรุณากรอกยี่ห้อ')
         }
       } else {
-        alert('กรุณากรอกยี่ห้อ')
+        alert('กรุณาเลือกชื่อ')
       }
     }
   };
   render() {
+    const Type1 = () => {
+      return (
+        <View>
+          <Picker
+            selectedValue={this.state.value}
+            onValueChange={this.updateValue}
+          >
+            <Picker.Item label="Harddisk" value="Harddisk" />
+            <Picker.Item label="Ram" value="Ram" />
+            <Picker.Item label="Smart Watch" value="Smart Watch" />
+            <Picker.Item label="SSD" value="SSD" />
+            <Picker.Item label="XBOX" value="XBOX" />
+            <Picker.Item label="คอมพิวเตอร์" value="คอมพิวเตอร์" />
+            <Picker.Item label="เครื่องปริ๊น" value="เครื่องปริ๊น" />
+            <Picker.Item label="คีย์บอร์ด" value="คีย์บอร์ด" />
+            <Picker.Item label="โน๊ตบุค" value="โน๊คบุค" />
+            <Picker.Item label="โทรศัพท์มือถือ" value="โทรศัพท์มือถือ" />
+            <Picker.Item label="โทรศัพท์บ้าน" value="โทรศัพท์บ้าน" />
+            <Picker.Item label="โทรทัศน์" value="โทรทัศน์" />
+            <Picker.Item label="แท็ปเล็ต" value="แท็ปเล็ต" />
+            <Picker.Item label="เมาส์" value="เมาส์" />
+            <Picker.Item label="ลำโพง" value="ลำโพง" />
+            <Picker.Item label="ลำโพงไร้สาย" value="ลำโพงไร้สาย" />
+            <Picker.Item label="หูฟัง" value="หูฟัง" />
+            <Picker.Item label="หูฟังไร้สาย" value="หูฟังไร้สาย" />
+            <Picker.Item label="อื่นๆ" value="อื่นๆ" />
+          </Picker>
+        </View>
+      )
+    }
+
+    const Type2 = () => {
+      return (
+        <View>
+          <Picker
+            selectedValue={this.state.value}
+            onValueChange={this.updateValue}
+          >
+
+            <Picker.Item label="กระติกน้ำร้อน" value="กระติกน้ำร้อน" />
+            <Picker.Item label="กระทะไฟฟ้า" value="กระทะไฟฟ้า" />
+            <Picker.Item label="เครื่องซักผ้า" value="เครื่องซักผ้า" />
+            <Picker.Item label="เครื่องดูดฝุ่น" value="เครื่องดูดฝุ่น" />
+            <Picker.Item label="เครื่องปิ๊งขนมปัง" value="เครื่องปิ๊งขนมปัง" />
+            <Picker.Item label="เครื่องเป่าผม" value="เครื่องเป่าผม" />
+            <Picker.Item label="เครื่องปรับอากาศ" value="เครื่องปรับอากาศ" />
+            <Picker.Item label="เครื่องปั่น" value="เครื่องปั่น" />
+            <Picker.Item label="เครื่องทำน้ำอุ่น" value="เครื่องทำน้ำอุ่น" />
+            <Picker.Item label="เครื่องสูบน้ำ" value="เครื่องสูบน้ำ" />
+            <Picker.Item label="เตารีด" value="เตารีด" />
+            <Picker.Item label="เตาปิ้งย่าง" value="เตาปิ้งย่าง" />
+            <Picker.Item label="พัดลม" value="พัดลม" />
+            <Picker.Item label="มอเตอร์" value="มอเตอร์" />
+            <Picker.Item label="หม้อหุงข้าว" value="หม้อหุงข้าว" />
+            <Picker.Item label="อื่นๆ" value="อื่นๆ" />
+          </Picker>
+        </View>
+      )
+    }
+
+    const Type3 = () => {
+      return (
+        <View>
+          <Picker
+            selectedValue={this.state.value}
+            onValueChange={this.updateValue}
+          >
+
+            <Picker.Item label="ดนตรีไทย" value="ดนตรีไทย" />
+            <Picker.Item label="กรับ" value="กรับ" />
+            <Picker.Item label="กลอง" value="กลอง" />
+            <Picker.Item label="ขิม" value="ขิม" />
+            <Picker.Item label="ขลุ่ย" value="ขลุ่ย" />
+            <Picker.Item label="ฆ้อง" value="ฆ้อง" />
+            <Picker.Item label="ฉิ่ง" value="ฉิ่ง" />
+            <Picker.Item label="ฉาบ" value="ฉาบ" />
+            <Picker.Item label="จะเข้" value="จะเข้" />
+            <Picker.Item label="ซอ" value="ซอ" />
+            <Picker.Item label="ตะโพน" value="ตะโพน" />
+            <Picker.Item label="ระนาดเอก" value="ระนาดเอก" />
+            <Picker.Item label="ระนาดทุ้ม" value="ระนาดทุ้ม" />
+            <Picker.Item label="สะล้อ" value="สะล้อ" />
+            <Picker.Item label=". . ." value="" />
+            <Picker.Item label="ดนตรีสากล" value="" />
+            <Picker.Item label="กีตาร์โปร่ง" value="กีตาร์โปร่ง" />
+            <Picker.Item label="กีตาร์ไฟฟ้า" value="กีตาร์ไฟฟ้า" />
+            <Picker.Item label="กลอง" value="กลอง" />
+            <Picker.Item label="คีย์บอร์ด" value="คีย์บอร์ด" />
+            <Picker.Item label="แซกโซโฟน" value="แซกโซโฟน" />
+            <Picker.Item label="ทรัมเป็ต" value="ทรัมเป็ต" />
+            <Picker.Item label="กลอง" value="กลอง" />
+            <Picker.Item label="เปียโน" value="เปียโน" />
+            <Picker.Item label="ฟลูต" value="ฟลูต" />
+            <Picker.Item label="ไวโอลีน" value="ไวโอลีน" />
+            <Picker.Item label="อื่นๆ" value="อื่นๆ" />
+          </Picker>
+        </View>
+      )
+    }
+
+    const Type4 = () => {
+      return (
+        <View>
+          <Picker
+            selectedValue={this.state.value}
+            onValueChange={this.updateValue}
+          >
+
+            <Picker.Item label="กล้องถ่ายรูป" value="กล้องถ่ายรูป" />
+            <Picker.Item label="กล้องวงจรปิด" value="กล้องวงจรปิด" />
+            <Picker.Item label="เครื่องคิดเลข" value="เครื่องคิดเลข" />
+            <Picker.Item label="โดรน" value="โดรน" />
+            <Picker.Item label="เพาเวอร์แบงค์" value="เพาเวอร์แบงค์" />
+            <Picker.Item label="วิทยุสื่อสาร" value="วิทยุสื่อสาร" />
+            <Picker.Item label="อื่นๆ" value="อื่นๆ" />
+          </Picker>
+        </View>
+      )
+    }
     return (
       <Container>
         <Modal
@@ -160,59 +299,40 @@ export default class Electornic extends Component {
         </Header>
         <Header >
           <Button
+            onPress={() => { this.setState({ type: 'มือถือ/คอม', value: 'Harddisk' }) }}
             vertical>
             <Icon name="laptop" />
             <Text style={{ color: 'white' }}>มือถือ/คอมฯ</Text>
           </Button>
           <Button
-            onPress={() => this.props.navigation.navigate('com')}
+            onPress={() => { this.setState({ type: 'เครื่องใช้ไฟฟ้า', value: 'กระติกน้ำร้อน' }) }}
             vertical>
             <Icon name="bulb" />
             <Text style={{ color: 'white' }}>เครื่องใช้ไฟฟ้า</Text>
           </Button>
           <Button
-            onPress={() => this.props.navigation.navigate('musical')}
+            onPress={() => { this.setState({ type: 'เครื่องดนตรี', value: 'ดนตรีไทย' }) }}
             vertical >
             <Icon active name="musical-note" />
             <Text style={{ color: 'white' }}>เครื่องดนตรี</Text>
           </Button>
-          <Button vertical>
+          <Button
+            onPress={() => { this.setState({ type: 'อุปกรณ์อื่นๆ', value: 'กล้องถ่ายรูป' }) }}
+            vertical>
             <Icon name="camera" />
             <Text style={{ color: 'white' }}>อุปกรณ์อื่นๆ</Text>
           </Button>
         </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
-          <Form>
-            <Picker
-              mode="dropdown"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              style={{ width: undefined }}
-              selectedValue={this.state.type}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="Harddisk" value="Harddisk" />
-              <Picker.Item label="Ram" value="Ram" />
-              <Picker.Item label="Smart Watch" value="Smart Watch" />
-              <Picker.Item label="SSD" value="SSD" />
-              <Picker.Item label="XBOX" value="XBOX" />
-              <Picker.Item label="คอมพิวเตอร์" value="คอมพิวเตอร์" />
-              <Picker.Item label="เครื่องปริ๊น" value="เครื่องปริ๊น" />
-              <Picker.Item label="คีย์บอร์ด" value="คีย์บอร์ด" />
-              <Picker.Item label="โน๊ตบุค" value="โน๊คบุค" />
-              <Picker.Item label="โทรศัพท์มือถือ" value="โทรศัพท์มือถือ" />
-              <Picker.Item label="โทรศัพท์บ้าน" value="โทรศัพท์บ้าน" />
-              <Picker.Item label="โทรทัศน์" value="โทรทัศน์" />
-              <Picker.Item label="แท็ปเล็ต" value="แท็ปเล็ต" />
-              <Picker.Item label="เมาส์" value="เมาส์" />
-              <Picker.Item label="ลำโพง" value="ลำโพง" />
-              <Picker.Item label="ลำโพงไร้สาย" value="ลำโพงไร้สาย" />
-              <Picker.Item label="หูฟัง" value="หูฟัง" />
-              <Picker.Item label="หูฟังไร้สาย" value="หูฟังไร้สาย" />
-              <Picker.Item label="อื่นๆ" value="อื่นๆ" />
-
-            </Picker>
-          </Form>
+          <View>
+            {
+              this.state.type === 'มือถือ/คอม' ? <Type1 /> :
+                this.state.type === 'เครื่องใช้ไฟฟ้า' ? <Type2 /> :
+                  this.state.type === 'เครื่องดนตรี' ? <Type3 /> :
+                    this.state.type === 'อุปกรณ์อื่นๆ' ? <Type4 /> :
+                      null
+            }
+          </View>
           <View style={styles.displayRow}>
             <Mytext text='ยี่ห้อ' />
             <Mytextinput
@@ -256,19 +376,27 @@ export default class Electornic extends Component {
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='ชื่อผู้ถือทรัพย์สินร่วม' />
+            <Mytext text='ผู้ถือกรรมสิทธิ์' />
+            <Mytextinput
+              onChangeText={(text) => { this.setState({ owner: text }) }}
+              placeholder="ระบุชื่อผู้ถือกรรมสิทธิ์ "
+            />
+          </View>
+          <View style={styles.displayRow}>
+            <Mytext text='ผู้ถือทรัพย์สินร่วม' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ partner: text }) }}
               placeholder="ระบุชื่อผู้ถือทรัพย์สินร่วม "
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='์Note' />
+            <Mytext text='Note' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ note: text }) }}
               placeholder="ระบุข้อความเพิ่มเติม "
             />
           </View>
+
           {/* <View style={styles.displayRow}>
           <Text style={styles.textRow}>กำหนดการแจ้งเตือน</Text>
           <DatePicker

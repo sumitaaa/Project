@@ -9,9 +9,8 @@ import Vehicle from './src/page/Vehicle';
 import Electornic from './src/page/Electornic';
 import Home2 from './src/page/Home2';
 import CalendarCom from './src/page/CalendarCom';
-import com from './src/page/com';
-import musical from './src/page/musical';
-// import camera from './src/page/camera';
+import condo from './src/page/condo';
+import flax from './src/page/flax';
 import SQLite from 'react-native-sqlite-storage'
 import deleted from './src/page/deleted';
 import search from './src/page/search';
@@ -97,15 +96,12 @@ const AppNavigator = createStackNavigator({
   Home2: {
     screen: Home2
   },
-  com: {
-    screen: com
+  condo: {
+    screen: condo
   },
-  musical: {
-    screen: musical
+  flax: {
+    screen: flax
   },
-  // camera: {
-  //   screen: camera
-  // },
   Calendar: {
     screen: CalendarCom
   },

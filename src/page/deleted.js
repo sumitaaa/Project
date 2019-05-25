@@ -15,13 +15,13 @@ export default class deleted extends Component {
         const { input_tabain } = this.state;
         db.transaction(tx => {
             tx.executeSql(
-                `DELETE FROM vehicles where vehicleID='${this.state.id}'`,
+                `DELETE FROM electornic where electornicID='${this.state.id}'`,
                 [],
                 (tx, results) => {
                     console.log('Results Delete', results.rowsAffected);
                     let fn = this.props.navigation.getParam('refresh', 'none')
                     fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                    this.props.navigation.navigate('Addasset', { comeFrom: 'car' })
+                    this.props.navigation.navigate('Addasset', { comeFrom: 'electornic' })
                 }
             );
         });
