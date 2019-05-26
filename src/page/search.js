@@ -5,6 +5,8 @@ import { Header, Title, Button, Icon, Left, Body, Item, Input } from "native-bas
 import SQLite from 'react-native-sqlite-storage'
 import Mytextinput from '../components/Mytextinput';
 var db = SQLite.openDatabase({ name: 'DB.db' });
+// test
+// testest
 
 const MyItem1 = ({ note, ownership, province, brand, type,
     partner, date, tabain, color, number, vehicleID }) => (
