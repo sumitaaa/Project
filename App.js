@@ -38,27 +38,23 @@ class App extends Component {
 
     db.transaction((tx) => {
 
-      // tx.executeSql('CREATE TABLE IF NOT EXISTS user(ID int, first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
-      //   [], (tx, result) => {
-      //     console.log('create table result : ', result)
-      //   }, (e) => {
-      //     console.log('error create table: ', e)
-      //   })
+      tx.executeSql('CREATE TABLE IF NOT EXISTS user(ID int, first_name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(80), phone VARCHAR(10))',
+        [], (tx, result) => {
+          console.log('create table result : ', result)
 
-      //     // tx.executeSql("INSERT INTO user(first_name, last_name,email,phone) VALUES ()",
-      //     // [], (tx, result) => {
-      //     //   console.log('result save : ', result)
-      //     // })
+          tx.executeSql("SELECT * FROM user", [], (tx, result) => {
+            console.log('result select : ', result)
+            var len = result.rows.length
+            if (len === 0) { // ต้องลงทะเบียน
+              this.props.navigation.navigate('Signup')
+            } else { // ไปหน้าโปรไฟล์cd de  
+              this.props.navigation.navigate('Home')
+            }
+          })
 
-      tx.executeSql("SELECT * FROM user", [], (tx, result) => {
-        console.log('result select : ', result)
-        var len = result.rows.length
-        if (len === 0) { // ต้องลงทะเบียน
-          this.props.navigation.navigate('Signup')
-        } else { // ไปหน้าโปรไฟล์cd de  
-          this.props.navigation.navigate('Home')
-        }
-      })
+        }, (e) => {
+          console.log('error create table: ', e)
+        })
     })
   }
 

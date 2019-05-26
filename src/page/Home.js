@@ -280,7 +280,7 @@ export default class Home extends Component {
             <Button
               onPress={() => {
                 let fn = this.props.navigation.getParam('refresh', 'none')
-                fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                if (fn !== 'none') fn() // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
                 this.props.navigation.navigate('Signup')
               }}
               vertical>
