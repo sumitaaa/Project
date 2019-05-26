@@ -6,6 +6,9 @@
 #
 build/
 android/
+*.lock
+*.bin
+*.properties
 *.pbxuser
 !default.pbxuser
 *.mode1v3
