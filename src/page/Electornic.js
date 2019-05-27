@@ -69,7 +69,7 @@ export default class Electornic extends Component {
                             tx.executeSql(`
                             INSERT INTO electornic (
                               type,
-                              name,
+                              value,
                               brand,
                               number,
                               color,

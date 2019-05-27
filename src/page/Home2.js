@@ -12,14 +12,11 @@ export default class Home2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chosenDate: new Date(),
       modalVisible: false,
 
-      department: '',
       selectedTab: 0,
       value: '',
-      type: 'ที่ดิน',
-      name: 'น.ส.2',
+      type: 'น.ส.2',
       number: '',
       district: '',
       province: '',
@@ -28,24 +25,15 @@ export default class Home2 extends Component {
       ownership: '',
       note: ''
     };
-    this.setDate = this.setDate.bind(this);
   }
   setTab = selectedTab => {
     this.setState({ selectedTab });
   }
-  updateDepartment = (department) => {  // updateDepartment รับตัวแปลมาจาก department
-    this.setState({ department: department })
-  }
 
-
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
-    //#ffd32a
-  }
   updateValue = (itemValue, itemIndex) => {
     this.setState({ value: itemValue })
   }
-  onValueChange(value) {
+  onValueChange = (value) => {
     this.setState({
       type: value
     });
@@ -53,64 +41,70 @@ export default class Home2 extends Component {
 
 
   Save = () => {
-    const { type, number, value, name, district, province, area, date, ownership, note } = this.state
-    console.log(type, number, value, name, district, province, area, date, ownership, note)
+    const { type, number, value, district, province, area, date, ownership, note } = this.state
+    console.log(type, number, value, district, province, area, date, ownership, note)
     console.log('is Saved home2')
     if (type) {
       if (number) {
-        if (width) {
-          if (long) {
-            if (ownership) {
-              if (partner) {
-                if (note) {
-                  console.log('is กรอกครบ Saved home2')
+        if (district) {
+          if (province) {
+            if (area) {
+              if (date) {
+                if (ownership) {
+                  if (note) {
+                    console.log('is กรอกครบ Saved home2')
 
-                  db.transaction((tx) => {
-                    tx.executeSql(`
-                            INSERT INTO home (
-                              type,
-                              number,
-                              width,
-                              long,
-                              ownership,
-                              partner,
+                    db.transaction((tx) => {
+                      tx.executeSql(`
+                            INSERT INTO homes (
+                              type, 
+                              number, 
+                              district, 
+                              province, 
+                              area, 
+                              date, 
+                              ownership, 
                               note
                             )
                             VALUES (
                               '${type}',
                               '${number}',
-                              '${width}',
-                              '${long}',
+                              '${district}',
+                              '${province}',
+                              '${area}',
+                              '${date}',
                               '${ownership}',
-                              '${partner}',
                               '${note}'
                             )
                           `, [], (t, res) => {
-                        // save สำเร็จ
-                        console.log('res insert home2 : ', res)
-                        let fn = this.props.navigation.getParam('refresh', 'none')
-                        fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                        this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
-                      })
-                  })
+                          // save สำเร็จ
+                          console.log('res insert home2 : ', res)
+                          let fn = this.props.navigation.getParam('refresh', 'none')
+                          fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                          this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
+                        })
+                    })
 
+                  } else {
+                    alert('กรุณากรอก Note')
+                  }
                 } else {
-                  alert('กรุณากรอก Note')
+                  alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน')
                 }
               } else {
-                alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+                alert('กรุณากรอกวันที่ออกโฉนด')
               }
             } else {
-              alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
+              alert('กรุณากรอกเนื้อที่(ตารางวา)')
             }
           } else {
-            alert('กรุณากรอกความยาว')
+            alert('กรุณากรอกจังหวัด')
           }
         } else {
-          alert('กรุณากรอกความกว้าง')
+          alert('กรุณากรอกอำเภอ')
         }
       } else {
-        alert('กรุณากรอกรุ่น')
+        alert('กรุณากรอกเลขที่โฉนด')
       }
     }
   };
@@ -175,8 +169,8 @@ export default class Home2 extends Component {
         </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
           <Picker
-            selectedValue={this.state.department}
-            onValueChange={this.updateDepartment}>
+            selectedValue={this.state.type}
+            onValueChange={this.onValueChange}>
 
             <Picker.Item label="น.ส.2" value="น.ส.2" />
             <Picker.Item label="น.ส.3" value="น.ส.3" />
@@ -202,28 +196,28 @@ export default class Home2 extends Component {
           <View style={styles.displayRow}>
             <Mytext text='อำเภอ' />
             <Mytextinput
-              onChangeText={(text) => { this.setState({ width: text }) }}
+              onChangeText={(text) => { this.setState({ district: text }) }}
               placeholder="ระบุอำเภอ "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='จังหวัด' />
             <Mytextinput
-              onChangeText={(text) => { this.setState({ long: text }) }}
+              onChangeText={(text) => { this.setState({ province: text }) }}
               placeholder="ระบุจังหวัด "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='เนื้อที่(ตารางวา)' />
             <Mytextinput
-              onChangeText={(text) => { this.setState({ long: text }) }}
+              onChangeText={(text) => { this.setState({ area: text }) }}
               placeholder="ระบุเนื้อที่(ตารางวา)"
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='วันที่ออกโฉนด' />
             <Mytextinput
-              onChangeText={(text) => { this.setState({ long: text }) }}
+              onChangeText={(text) => { this.setState({ date: text }) }}
               placeholder="ระบุวันที่ออกโฉนด"
             />
           </View>

@@ -51,7 +51,10 @@ const Item3 = ({ id, type, name, brand, number, color, date, insurance, store, o
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
-const Item4 = ({ id, type, number, width, long, ownership, partner, note }) => (
+
+
+//ที่ดิน
+const Item4 = ({ id, type, number, district, province, area, date, ownership, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
@@ -59,8 +62,38 @@ const Item4 = ({ id, type, number, width, long, ownership, partner, note }) => (
     borderRadius: 20
   }}>
     <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         ความกว้าง : {width}          ความยาว : {long}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         อำเภอ : {district}          จังหวัด : {province}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เนื้อที่(ตารางวา) : {area}         วันที่ออกโฉนด : {date}    </Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์คนปัจจุบัน : {ownership}        </Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+  </View>
+)
+
+// ทรัพย์สินบนที่ดิน
+// const Item5 = ({ id, type, number, note }) => (
+//   <View style={{
+//     marginVertical: 5,
+//     fontWeight: 'bold',
+//     backgroundColor: '#ffe6e6',
+//     borderRadius: 20
+//   }}>
+//     <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         ความกว้าง : {width}          ความยาว : {long}</Text>
+//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+//   </View>
+// )
+
+// ภาษี
+const Item6 = ({ id, type, number, note }) => (
+  <View style={{
+    marginVertical: 5,
+    fontWeight: 'bold',
+    backgroundColor: '#ffe6e6',
+    borderRadius: 20
+  }}>
+    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ระบุเลขประจำตัวผู้เสียภาษี : {number} </Text>
     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
@@ -71,11 +104,15 @@ export default class Addasset extends Component {
     super(props)
 
     this.state = {
+      comeFrom: '',
       chosenDate: new Date(),
       modalVisible: false,
       dataArray: [],
       active: 'true',
       items: [],
+      itemsHome: [],
+      itemsCondo: [],
+      itemsFlax: [],
     };
     this.setDate = this.setDate.bind(this);
   }
@@ -173,6 +210,8 @@ export default class Addasset extends Component {
   componentDidMount() { //render ui => do fn()
     // this.getDataArray()
     let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+    console.log('&&&&&&come From : ', comeFrom)
+    this.setState({ items: [], comeFrom })
     if (comeFrom === 'car') {
       db.transaction((tx) => {
         tx.executeSql(`
@@ -213,16 +252,39 @@ export default class Addasset extends Component {
       })
     }
     else if (comeFrom === 'home') {
+      console.log('DDDD')
       db.transaction((tx) => {
-        tx.executeSql(`
-          SELECT * FROM home
-        `, [], (t, res) => {
-            let items = []
-            for (let i = 0; i < res.rows.length; i++) {
-              items.push(res.rows.item(i))
-            }
-            this.setState({ items: items })
-          })
+
+        tx.executeSql(`SELECT * FROM homes`, [], (t, res) => {
+          let itemsHome = []
+          console.log('res is : ', res.rows.length)
+          for (let i = 0; i < res.rows.length; i++) {
+            itemsHome.push(res.rows.item(i))
+            console.log('homes : ', res.rows.item(i))
+          }
+          this.setState({ itemsHome: itemsHome })
+        })
+
+        tx.executeSql(`SELECT * FROM condo`, [], (t, res) => {
+          let itemsCondo = []
+          console.log('res is : ', res.rows.length)
+          for (let i = 0; i < res.rows.length; i++) {
+            itemsCondo.push(res.rows.item(i))
+            console.log('Condos : ', res.rows.item(i))
+          }
+          this.setState({ itemsCondo: itemsCondo })
+        })
+
+        tx.executeSql(`SELECT * FROM flax`, [], (t, res) => {
+          let itemsFlax = []
+          console.log('res is : ', res.rows.length)
+          for (let i = 0; i < res.rows.length; i++) {
+            itemsFlax.push(res.rows.item(i))
+            console.log('Flaxs : ', res.rows.item(i))
+          }
+          this.setState({ itemsFlax: itemsFlax })
+        })
+
       })
     }
 
@@ -282,72 +344,87 @@ export default class Addasset extends Component {
         <ScrollView style={{ flexGrow: 1, backgroundColor: '#f3a683' }}>
 
           {
-            this.state.items.length === 0 ?
+            this.state.items.length === 0 &&
+              this.state.itemsCondo.length === 0 &&
+              this.state.itemsHome.length === 0 &&
+              this.state.itemsFlax.length === 0
+              ?
               <Text style={{ marginTop: 80, fontSize: 20, textAlign: 'center', color: 'white' }}>ไม่มีข้อมูลทรัพย์สิน</Text>
-              : this.state.items.map((e, i) => {
-                let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
-                if (comeFrom === 'car') {
-                  return <Item1
-                    key={i}
-                    id={e.vehicleID}
-                    type={e.type}
-                    brand={e.brand}
-                    number={e.number}
-                    color={e.color}
-                    tabain={e.tabain}
-                    date={e.date}
-                    province={e.province}
-                    ownership={e.ownership}
-                    partner={e.partner}
-                    note={e.note}
-                  />
-                } else if (comeFrom === 'accessories') {
-                  return <Item2
-                    key={i}
-                    id={e.accessoriesID}
-                    type={e.type}
-                    brand={e.brand}
-                    number={e.number}
-                    color={e.color}
-                    size={e.size}
-                    weight={e.weight}
-                    partner={e.partner}
-                    note={e.note}
-                  />
+              :
+              this.state.comeFrom !== 'home' ?
+                this.state.items.map((e, i) => {
 
-                } else if (comeFrom === 'electornic') {
-                  return <Item3
-                    key={i}
-                    id={e.electornicID}
-                    name={e.name}
-                    type={e.type}
-                    brand={e.brand}
-                    number={e.number}
-                    color={e.color}
-                    date={e.date}
-                    insurance={e.insurance}
-                    store={e.store}
-                    owner={e.owner}
-                    partner={e.partner}
-                    note={e.note}
-                  />
+                  if (this.state.comeFrom === 'car') {
+                    return <Item1
+                      key={i}
+                      id={e.vehicleID}
+                      type={e.type}
+                      brand={e.brand}
+                      number={e.number}
+                      color={e.color}
+                      tabain={e.tabain}
+                      date={e.date}
+                      province={e.province}
+                      ownership={e.ownership}
+                      partner={e.partner}
+                      note={e.note}
+                    />
+                  } else if (this.state.comeFrom === 'accessories') {
+                    return <Item2
+                      key={i}
+                      id={e.accessoriesID}
+                      type={e.type}
+                      brand={e.brand}
+                      number={e.number}
+                      color={e.color}
+                      size={e.size}
+                      weight={e.weight}
+                      partner={e.partner}
+                      note={e.note}
+                    />
 
-                } else if (comeFrom === 'home') {
-                  return <Item4
-                    key={i}
-                    id={e.homeID}
-                    type={e.type}
-                    number={e.number}
-                    width={e.width}
-                    long={e.long}
-                    ownership={e.ownership}
-                    partner={e.partner}
-                    note={e.note}
-                  />
+                  } else if (this.state.comeFrom === 'electornic') {
+                    return <Item3
+                      key={i}
+                      id={e.electornicID}
+                      name={e.name}
+                      type={e.type}
+                      brand={e.brand}
+                      number={e.number}
+                      color={e.color}
+                      date={e.date}
+                      insurance={e.insurance}
+                      store={e.store}
+                      owner={e.owner}
+                      partner={e.partner}
+                      note={e.note}
+                    />
 
-                }
+                  }
+                })
+                :
+                // คือหน้า HOME
+                <View>
+                  {/* {
+                    this.state.itemsHome.map((e, i) => <Item5
 
-              })
+                    />)
+                  } */}
+                  {
+                    this.state.itemsCondo.map((e, i) => <Item4
+                    // key={i}
+                    // id={e.homeID}
+                    // type={e.type}
+                    // number={e.number}
+                    // id, type, number, width, long, ownership, partner, note
+                    />)
+                  }
+                  {
+                    this.state.itemsFlax.map((e, i) => <Item6
+
+                    />)
+                  }
+                </View>
           }
 
         </ScrollView>
@@ -363,7 +440,14 @@ export default class Addasset extends Component {
             onPress={() => this.setState({ active: !this.state.active })}>
             <Icon type='FontAwesome5' name="angle-double-up" />
             <Button
-              onPress={() => this.props.navigation.navigate('search', { refresh: () => { this.componentDidMount() } })}
+              onPress={() => {
+                let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+                this.props.navigation.navigate('search', {
+                  refresh: () => { this.componentDidMount() },
+                  comeFrom
+                })
+              }
+              }
               style={{ backgroundColor: '#34A34F' }}>
               <Icon name="search" />
             </Button>

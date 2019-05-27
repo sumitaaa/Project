@@ -15,17 +15,12 @@ export default class Home2 extends Component {
             chosenDate: new Date(),
             modalVisible: false,
 
-            email: '',
-            password: '',
-            department: '',
             selectedTab: 0,
-
-            type: 'โฉนดที่ดิน',
             number: '',
-            width: '',
-            long: '',
+            list: '',
+            typeasset: '',
+            nature: '',
             ownership: '',
-            partner: '',
             note: ''
         };
         this.setDate = this.setDate.bind(this);
@@ -33,10 +28,6 @@ export default class Home2 extends Component {
     setTab = selectedTab => {
         this.setState({ selectedTab });
     }
-    updateDepartment = (department) => {  // updateDepartment รับตัวแปลมาจาก department
-        this.setState({ department: department })
-    }
-
 
 
     setDate(newDate) {
@@ -51,65 +42,62 @@ export default class Home2 extends Component {
 
 
     Save = () => {
-        const { type, number, width, long, ownership, partner, note } = this.state
-        console.log(type, number, width, long, ownership, partner, note)
-        console.log('is Saved home2')
-        if (type) {
-            if (number) {
-                if (width) {
-                    if (long) {
+        const { number, list, typeasset, nature, ownership, note } = this.state
+        console.log(number, list, typeasset, nature, ownership, note)
+        console.log('is Saved condo')
+        if (number) {
+            if (list) {
+                if (typeasset) {
+                    if (nature) {
                         if (ownership) {
-                            if (partner) {
-                                if (note) {
-                                    console.log('is กรอกครบ Saved home2')
+                            if (note) {
+                                console.log('is กรอกครบ Saved condo')
 
-                                    db.transaction((tx) => {
-                                        tx.executeSql(`
+                                db.transaction((tx) => {
+                                    tx.executeSql(`
                             INSERT INTO home (
-                              type,
-                              number,
-                              width,
-                              long,
-                              ownership,
-                              partner,
-                              note
+                                number ,
+                                list,
+                                typeasset,
+                                nature,
+                                ownership,
+                                note
                             )
                             VALUES (
-                              '${type}',
                               '${number}',
-                              '${width}',
-                              '${long}',
+                              '${list}',
+                              '${typeasset}',
+                              '${nature}',
                               '${ownership}',
-                              '${partner}',
                               '${note}'
                             )
                           `, [], (t, res) => {
-                                                // save สำเร็จ
-                                                console.log('res insert home2 : ', res)
-                                                let fn = this.props.navigation.getParam('refresh', 'none')
-                                                fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                                                this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
-                                            })
-                                    })
+                                            // save สำเร็จ
+                                            console.log('res insert condo : ', res)
+                                            let fn = this.props.navigation.getParam('refresh', 'none')
+                                            fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                                            this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
+                                        })
+                                })
 
-                                } else {
-                                    alert('กรุณากรอก Note')
-                                }
                             } else {
-                                alert('กรุณากรอกชื่อผู้ถือทรัพย์สินร่วม')
+                                alert('กรุณากรอก Note')
                             }
                         } else {
-                            alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์')
+                            alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน')
                         }
+
                     } else {
-                        alert('กรุณากรอกความยาว')
+                        alert('กรุณากรอกลักษณะทรัพย์สิน')
                     }
                 } else {
-                    alert('กรุณากรอกความกว้าง')
+                    alert('กรุณากรอกประเภททรัพย์สิน')
                 }
             } else {
-                alert('กรุณากรอกรุ่น')
+                alert('กรุณากรอกรายการที่อยู่')
             }
+        } else {
+            alert('กรุณากรอกรหัสประจำทรัพย์สิน')
         }
     };
     render() {
@@ -183,21 +171,21 @@ export default class Home2 extends Component {
                     <View style={styles.displayRow}>
                         <Mytext text='รายการที่อยู่' />
                         <Mytextinput
-                            onChangeText={(text) => { this.setState({ width: text }) }}
+                            onChangeText={(text) => { this.setState({ list: text }) }}
                             placeholder="ระบุรายการที่อยู่"
                         />
                     </View>
                     <View style={styles.displayRow}>
                         <Mytext text='ประเภททรัพย์สิน' />
                         <Mytextinput
-                            onChangeText={(text) => { this.setState({ long: text }) }}
+                            onChangeText={(text) => { this.setState({ typeasset: text }) }}
                             placeholder="ระบุประเภททรัะพย์สิน เช่น บ้าน "
                         />
                     </View>
                     <View style={styles.displayRow}>
                         <Mytext text='ลักษณะทรัพย์สิน' />
                         <Mytextinput
-                            onChangeText={(text) => { this.setState({ long: text }) }}
+                            onChangeText={(text) => { this.setState({ nature: text }) }}
                             placeholder="ระบุลักษณะทรัพย์สิน"
                         />
                     </View>

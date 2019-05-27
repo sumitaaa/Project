@@ -137,11 +137,11 @@ export default class Home extends Component {
       tx.executeSql(`CREATE TABLE IF NOT EXISTS accessories (
           accessoriesID INTEGER PRIMARY KEY AUTOINCREMENT, 
           type VARCHAR(30),
-          brand VARCHAR(30),,
+          brand VARCHAR(30),
           color VARCHAR(20),
-          number VARCHAR(30)
+          number VARCHAR(30),
           size FLOAT(10),
-          weight FLOAT(50), 
+          weight FLOAT(50),
           ownership VARCHAR(60), 
           partner VARCHAR(60),
           note VARCHAR(100)
@@ -151,7 +151,7 @@ export default class Home extends Component {
         })
       // create table electornic
       tx.executeSql(`CREATE TABLE IF NOT EXISTS electornic (
-        electornicID INTEGER PRIMARY KEY AUTOINCREMENT, 
+        electornicID INTEGER PRIMARY KEY AUTOINCREMENT,
         type VARCHAR(30),
         name VARCHAR(30),
         brand VARCHAR(30),
@@ -168,10 +168,9 @@ export default class Home extends Component {
           console.log('create table electornic result : ', result);
         })
       // create table home
-      tx.executeSql(`CREATE TABLE IF NOT EXISTS home (
+      tx.executeSql(`CREATE TABLE IF NOT EXISTS homes (
         homeID INTEGER PRIMARY KEY AUTOINCREMENT, 
         type VARCHAR(30),
-        name VARCHAR(30),
         number VARCHAR(30),
         district VARCHAR(30),
         province VARCHAR(30),
@@ -181,7 +180,7 @@ export default class Home extends Component {
         note VARCHAR(30)
         )`,
         [], (tx, result) => {
-          console.log('create table electornic result : ', result);
+          console.log('create table home2 result : ', result);
         })
       tx.executeSql(`CREATE TABLE IF NOT EXISTS condo (
           condoID INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -194,7 +193,7 @@ export default class Home extends Component {
           note VARCHAR(30)
           )`,
         [], (tx, result) => {
-          console.log('create table electornic result : ', result);
+          console.log('create table condo result : ', result);
         })
       tx.executeSql(`CREATE TABLE IF NOT EXISTS flax (
             flaxID INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -204,7 +203,7 @@ export default class Home extends Component {
             note VARCHAR(30)
             )`,
         [], (tx, result) => {
-          console.log('create table electornic result : ', result);
+          console.log('create table flax result : ', result);
         })
 
     })

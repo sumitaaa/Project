@@ -7,6 +7,7 @@ import Mytextinput from '../components/Mytextinput';
 var db = SQLite.openDatabase({ name: 'DB.db' });
 // test
 
+
 const MyItem1 = ({ note, ownership, province, brand, type,
     partner, date, tabain, color, number, vehicleID }) => (
         <View style={{
@@ -68,40 +69,39 @@ export default class search extends Component {
 
     search = () => {
         console.log(this.state.type);
-        // let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
-        // if (comeFrom === 'car') {
-        db.transaction(tx => {
-            tx.executeSql(
-                `SELECT * FROM vehicles where type = '${this.state.type}'`,
-                [],
-                (tx, results) => {
-                    var len = results.rows.length;
-                    let items = []
-                    for (let i = 0; i < len; i++) {
-                        items.push(results.rows.item(i))
+        let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+        if (comeFrom === 'car') {
+            db.transaction(tx => {
+                tx.executeSql(
+                    `SELECT * FROM vehicles where type = '${this.state.type}'`,
+                    [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        let items = []
+                        for (let i = 0; i < len; i++) {
+                            items.push(results.rows.item(i))
+                            console.log('row is : ', results.rows.item(i))
+                        }
+                        this.setState({ items: items })
                     }
-                    this.setState({ items: items })
-                }
-            );
-        });
-        // } else if (comeFrom === 'accessories') {
-        //     db.transaction(tx => {
-        //         tx.executeSql(
-        //             `SELECT * FROM accessories where type = '${this.state.type}'`,
-        //             [],
-        //             (tx, results) => {
-        //                 var len = results.rows.length;
-        //                 let items = []
-        //                 for (let i = 0; i < len; i++) {
-        //                     items.push(results.rows.item(i))
-        //                 }
-        //                 this.setState({ items: items })
-        //             }
-        //         );
-        //     });
-
-
-        // }
+                );
+            });
+        } else if (comeFrom === 'accessories') {
+            db.transaction(tx => {
+                tx.executeSql(
+                    `SELECT * FROM accessories where type = '${this.state.type}'`,
+                    [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        let items = []
+                        for (let i = 0; i < len; i++) {
+                            items.push(results.rows.item(i))
+                        }
+                        this.setState({ items: items })
+                    }
+                );
+            });
+        }
     };
 
 
@@ -147,6 +147,7 @@ export default class search extends Component {
                 {
                     this.state.items.length > 0 ? this.state.items.map((e, i) => {
                         let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+                        console.log('!!!come from : ', comeFrom)
                         if (comeFrom === 'car') {
                             return <MyItem1 key={i}
                                 note={e.note}
