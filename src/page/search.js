@@ -52,7 +52,7 @@ const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, acce
         <Text style={styles.text}>Note : {note}</Text>
     </View>
 )
-const MyItem3 = ({ type, name, brand, number, color, date, insurance, store, owner, partner, note }) => (
+const MyItem3 = ({ type, name, brand, number, color, date, insurance, store, owner, partner, note, electornicID }) => (
     <View style={{
         marginVertical: 5,
         fontWeight: 'bold',
@@ -78,7 +78,6 @@ const MyItem3 = ({ type, name, brand, number, color, date, insurance, store, own
     </View>
 )
 
-
 export default class search extends Component {
 
     constructor(props) {
@@ -88,16 +87,18 @@ export default class search extends Component {
             type: '',
             assetData: '',
             items: [],
+            searchText: '',
         };
     }
 
-    search = () => {
+    search = async () => {
         console.log(this.state.type);
+        await this.setState({ searchText: this.state.type })
         let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
         if (comeFrom === 'car') {
             db.transaction(tx => {
                 tx.executeSql(
-                    `SELECT * FROM vehicles where type = '${this.state.type}'`,
+                    `SELECT * FROM vehicles where type = '${this.state.searchText}'`,
                     [],
                     (tx, results) => {
                         var len = results.rows.length;
@@ -113,7 +114,7 @@ export default class search extends Component {
         } else if (comeFrom === 'accessories') {
             db.transaction(tx => {
                 tx.executeSql(
-                    `SELECT * FROM accessories where type = '${this.state.type}'`,
+                    `SELECT * FROM accessories where type = '${this.state.searchText}'`,
                     [],
                     (tx, results) => {
                         var len = results.rows.length;
@@ -125,57 +126,52 @@ export default class search extends Component {
                     }
                 );
             });
-        } else if (comeFrom === 'electornic ') {
-            db.transaction((tx) => {
-                tx.executeSql(`
-                SELECT * FROM electornic  where type = '${this.state.type}'
-              `, (tx, results) => {
+        } else if (comeFrom === 'electornic') {
+            console.log('come From2 : ', comeFrom)
+            db.transaction(tx => {
+                tx.executeSql(
+                    `SELECT * FROM electornic where type = '${this.state.searchText}'`,
+                    [],
+                    (tx, results) => {
                         var len = results.rows.length;
                         let items = []
                         for (let i = 0; i < len; i++) {
                             items.push(results.rows.item(i))
                         }
                         this.setState({ items: items })
-                    })
+                    }
+                );
             });
         }
-        // else if (comeFrom === 'home') {
-        //     db.transaction((tx) => {
-
-        //         tx.executeSql(`
-        //         SELECT * FROM homes  where type = '${this.state.type}'
-        //       `, (tx, results) => {
-        //                 var len = results.rows.length;
-        //                 let items = []
-        //                 for (let i = 0; i < len; i++) {
-        //                     items.push(results.rows.item(i))
-        //                 }
-        //                 this.setState({ items: items })
-        //             })
-
-        //         tx.executeSql(`
-        //         SELECT * FROM condo  where type = '${this.state.type}'
-        //       `, (tx, results) => {
-        //                 var len = results.rows.length;
-        //                 let items = []
-        //                 for (let i = 0; i < len; i++) {
-        //                     items.push(results.rows.item(i))
-        //                 }
-        //                 this.setState({ items: items })
-        //             })
-        //         tx.executeSql(`
-        //         SELECT * FROM flax  where type = '${this.state.type}'
-        //       `, (tx, results) => {
-        //                 var len = results.rows.length;
-        //                 let items = []
-        //                 for (let i = 0; i < len; i++) {
-        //                     items.push(results.rows.item(i))
-        //                 }
-        //                 this.setState({ items: items })
-        //             })
-
-        //     })
-        // }
+        else if (comeFrom === 'home') {
+            console.log('comefrom : ', comeFrom)
+            db.transaction((tx) => {
+                let type = this.state.searchText
+                let string = ''
+                if (type === 'ที่ดิน') {
+                    string = `SELECT * FROM homes`
+                } else if (type === 'ทรัพย์สินแบบที่ดิน') {
+                    string = `SELECT * FROM condo`
+                } else if (type === 'ภาษี') {
+                    string = `SELECT * FROM flax`
+                } else {
+                    return
+                }
+                console.log('string is : ', string)
+                tx.executeSql(
+                    string,
+                    [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        let items = []
+                        for (let i = 0; i < len; i++) {
+                            items.push(results.rows.item(i))
+                        }
+                        this.setState({ items: items })
+                    }
+                );
+            })
+        }
     };
 
 
@@ -267,6 +263,24 @@ export default class search extends Component {
                                 partner={e.partner}
                                 note={e.note}
                             />
+                        } else if (comeFrom === 'home' && this.state.searchText === 'ที่ดิน') {
+                            return (
+                                <View>
+                                    <Text>ที่ดิน {e.homesID}</Text>
+                                </View>
+                            )
+                        } else if (comeFrom === 'home' && this.state.searchText === 'ทรัพย์สินบนที่ดิน') {
+                            return (
+                                <View>
+                                    <Text>ทรัะย์สินบนที่ดิน {e.condoID}</Text>
+                                </View>
+                            )
+                        } else if (comeFrom === 'home' && this.state.searchText === 'ภาษี') {
+                            return (
+                                <View>
+                                    <Text>ภาษี</Text>
+                                </View>
+                            )
                         }
                     }) : <View style={{ width: '100%' }}>
                             <Text style={{ fontSize: 24, textAlign: 'center', marginTop: 100 }}>ไม่พบข้อมูล</Text>

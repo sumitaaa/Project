@@ -9,6 +9,7 @@ export default class deleted extends Component {
         super(props);
         this.state = {
             id: '',
+            type: ''
         };
     }
     deleteUser = () => {
@@ -16,7 +17,7 @@ export default class deleted extends Component {
         if (comeFrom === 'car') {
             db.transaction(tx => {
                 tx.executeSql(
-                    `DELETE FROM vehicle where vehicleID='${this.state.id}'`,
+                    `DELETE FROM vehicles where vehicleID='${this.state.id}'`,
                     [],
                     (tx, results) => {
                         console.log('Results Delete', results.rowsAffected);
@@ -24,6 +25,7 @@ export default class deleted extends Component {
                         fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
                         this.props.navigation.navigate('Addasset', { comeFrom: 'car' })
                     }
+
                 );
             });
         } else if (comeFrom === 'accessories') {
@@ -54,38 +56,32 @@ export default class deleted extends Component {
             });
         } else if (comeFrom === 'home') {
             db.transaction((tx) => {
+                let table = ''
+                let idField = ''
+                let type = this.state.type
+                if (type === 'ที่ดิน') {
+                    idField = 'homesID'
+                    table = 'homes'
+                }
+                else if (type === 'ทรัพย์สินบนที่ดิน') {
+                    idField = 'condoID'
+                    table = 'condo'
+                }
+                else if (type === 'ภาษี') {
+                    idField = 'flaxID'
+                    table = 'flax'
+                }
+                else return
                 tx.executeSql(
-                    `DELETE FROM homes where homesID='${this.state.id}'`,
+                    `DELETE FROM ${table} where ${idField}='${this.state.id}'`,
                     [],
                     (tx, results) => {
-                        console.log('Results Delete', results.rowsAffected);
+                        console.log('ssssResults Delete', results.rowsAffected);
                         let fn = this.props.navigation.getParam('refresh', 'none')
                         fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
                         this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
                     }
                 );
-
-                tx.executeSql(
-                    `DELETE FROM condo where condoID='${this.state.id}'`,
-                    [],
-                    (tx, results) => {
-                        console.log('Results Delete', results.rowsAffected);
-                        let fn = this.props.navigation.getParam('refresh', 'none')
-                        fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                        this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
-                    }
-                );
-                tx.executeSql(
-                    `DELETE FROM flax where flaxID='${this.state.id}'`,
-                    [],
-                    (tx, results) => {
-                        console.log('Results Delete', results.rowsAffected);
-                        let fn = this.props.navigation.getParam('refresh', 'none')
-                        fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                        this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
-                    }
-                );
-
             })
         }
     };
@@ -112,6 +108,16 @@ export default class deleted extends Component {
                         placeholder="กรอก ID"
                     />
                 </View>
+                {
+                    this.props.navigation.getParam('comeFrom', 'none') === 'home' && (
+                        <View style={{ marginTop: 15, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <Mytextinput
+                                onChangeText={e => this.setState({ type: e })}
+                                placeholder="กรอก ประเภท"
+                            />
+                        </View>)
+                }
+
                 <Button
                     style={{
                         marginVertical: 20,

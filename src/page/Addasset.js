@@ -501,7 +501,13 @@ export default class Addasset extends Component {
               <Icon type='Entypo' name="arrow-with-circle-down" />
             </Button>
             <Button
-              onPress={() => this.props.navigation.navigate('deleted', { refresh: () => { this.componentDidMount() } })}
+              onPress={() => {
+                let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
+                this.props.navigation.navigate('deleted', {
+                  refresh: () => { this.componentDidMount() },
+                  comeFrom
+                })
+              }}
               style={{ backgroundColor: '#DD5144' }}>
               <Icon type='Entypo' name="trash" />
             </Button>
