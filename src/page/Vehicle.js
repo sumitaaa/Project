@@ -172,7 +172,7 @@ export default class Vehicle extends Component {
   render() {
     return (
       <Container>
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
@@ -188,9 +188,9 @@ export default class Vehicle extends Component {
               </Right>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
 
-        <Header style={{ backgroundColor: '#eb4d4b' }}>
+        <Header style={{ backgroundColor: '#0c2461' }}>
           <Left>
             <Button
               onPress={() => this.props.navigation.goBack()}
@@ -201,13 +201,13 @@ export default class Vehicle extends Component {
           <Body>
             <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
-          <Right>
+          {/* <Right>
             <Button
               onPress={() => { this.setState({ modalVisible: true }) }} primary>
               <Icon type='Entypo' name='export' />
               <Text style={{ color: 'white', padding: 15 }}>ถ่ายโอน</Text>
             </Button>
-          </Right>
+          </Right> */}
         </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20, flexGrow: 1 }}>
           <Form>
@@ -215,7 +215,7 @@ export default class Vehicle extends Component {
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
+              placeholderIconColor="#0c2461"
               style={{ width: undefined }}
               selectedValue={this.state.type}
               onValueChange={this.onValueChange.bind(this)}
@@ -245,7 +245,7 @@ export default class Vehicle extends Component {
             <Mytext text='สี' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ color: text }) }}
-              placeholder="ระบุสี "
+              placeholder="ระบุสี เช่น ขาว"
             />
           </View>
           <View style={styles.displayRow}>
@@ -259,7 +259,7 @@ export default class Vehicle extends Component {
             <Mytext text='วันจดทะเบียน' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ date: text }) }}
-              placeholder="วว/ดด/ปป"
+              placeholder=" เช่น 01/01/2019"
             />
           </View>
           <View style={styles.displayRow}>
@@ -313,6 +313,7 @@ export default class Vehicle extends Component {
         </ScrollView>
 
         <Button
+          style={{ backgroundColor: '#0c2461' }}
           onPress={this.Save}
           full danger>
           <Text style={{ color: 'white' }}>Save</Text>
@@ -327,13 +328,14 @@ const styles = StyleSheet.create({
 
   displayRow: {
     marginLeft: 45,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    color: '#0c2461'
   },
   dateStyle: {
     color: "white",
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#e67e22',
+    backgroundColor: '#0c2461',
     paddingHorizontal: 185,
     marginLeft: '17%',
     borderRadius: 4,

@@ -132,7 +132,7 @@ export default class Electornic extends Component {
           alert('กรุณากรอกยี่ห้อ')
         }
       } else {
-        alert('กรุณาเลือกชื่อ')
+        alert('กรุณาเลือกชนิด')
       }
     }
   };
@@ -258,7 +258,7 @@ export default class Electornic extends Component {
     }
     return (
       <Container>
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
@@ -275,9 +275,9 @@ export default class Electornic extends Component {
             </View>
           </View>
 
-        </Modal>
+        </Modal> */}
 
-        <Header style={{ backgroundColor: '#eb4d4b' }}>
+        <Header style={{ backgroundColor: '#0c2461' }}>
           <Left>
             <Button
               onPress={() => this.props.navigation.goBack()}
@@ -288,39 +288,43 @@ export default class Electornic extends Component {
           <Body>
             <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
-          <Right>
+          {/* <Right>
             <Button
 
               onPress={() => { this.setState({ modalVisible: true }) }} primary>
               <Icon type='Entypo' name='export' />
               <Text style={{ color: 'white', padding: 8 }}>ถ่ายโอน</Text>
             </Button>
-          </Right>
+          </Right> */}
         </Header>
-        <Header >
+        <Header style={{ backgroundColor: '#dff9fd' }}>
           <Button
+            style={{ backgroundColor: '#dff9fd' }}
             onPress={() => { this.setState({ type: 'มือถือ/คอม', value: 'Harddisk' }) }}
             vertical>
-            <Icon name="laptop" />
-            <Text style={{ color: 'white' }}>มือถือ/คอมฯ</Text>
+            <Icon style={{ color: 'black', }} name="laptop" />
+            <Text style={{ color: 'black' }}>คอมฯ</Text>
           </Button>
           <Button
+            style={{ backgroundColor: '#dff9fd' }}
             onPress={() => { this.setState({ type: 'เครื่องใช้ไฟฟ้า', value: 'กระติกน้ำร้อน' }) }}
             vertical>
-            <Icon name="bulb" />
-            <Text style={{ color: 'white' }}>เครื่องใช้ไฟฟ้า</Text>
+            <Icon style={{ color: 'black' }} name="bulb" />
+            <Text style={{ color: 'black' }}>เครื่องใช้ไฟฟ้า</Text>
           </Button>
           <Button
+            style={{ backgroundColor: '#dff9fd' }}
             onPress={() => { this.setState({ type: 'เครื่องดนตรี', value: 'ดนตรีไทย' }) }}
             vertical >
-            <Icon active name="musical-note" />
-            <Text style={{ color: 'white' }}>เครื่องดนตรี</Text>
+            <Icon style={{ color: 'black' }} active name="musical-note" />
+            <Text style={{ color: 'black' }}>เครื่องดนตรี</Text>
           </Button>
           <Button
+            style={{ backgroundColor: '#dff9fd' }}
             onPress={() => { this.setState({ type: 'อุปกรณ์อื่นๆ', value: 'กล้องถ่ายรูป' }) }}
             vertical>
-            <Icon name="camera" />
-            <Text style={{ color: 'white' }}>อุปกรณ์อื่นๆ</Text>
+            <Icon style={{ color: 'black' }} name="camera" />
+            <Text style={{ color: 'black' }}>อื่นๆ</Text>
           </Button>
         </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
@@ -351,21 +355,21 @@ export default class Electornic extends Component {
             <Mytext text='สี' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ color: text }) }}
-              placeholder="ระบุสี "
+              placeholder="ระบุสี เช่น ขาว "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='วันที่ซื้อ' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ date: text }) }}
-              placeholder="ระบุวันที่ซื้อ "
+              placeholder=" เช่น 01/01/2019 "
             />
           </View>
           <View style={styles.displayRow}>
             <Mytext text='ประกัน' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ insurance: text }) }}
-              placeholder="ระบุวันหมดประกัน "
+              placeholder="ระบุวันหมดประกัน เช่น 01/01/2019 "
             />
           </View>
           <View style={styles.displayRow}>
@@ -417,7 +421,7 @@ export default class Electornic extends Component {
         </View> */}
 
         </ScrollView>
-        <Button
+        <Button style={{ backgroundColor: '#0c2461' }}
           onPress={this.Save}
           full danger>
           <Text style={{ color: 'white' }}>Save</Text>
@@ -432,14 +436,15 @@ const styles = StyleSheet.create({
 
   displayRow: {
     marginLeft: 45,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    color: '#0c2461'
 
   },
   dateStyle: {
     color: "white",
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#e67e22',
+    backgroundColor: '#0c2461',
     paddingHorizontal: 185,
     marginLeft: '17%',
     borderRadius: 4,

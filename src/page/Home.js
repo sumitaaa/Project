@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Image, Modal, Dimensions, TouchableOpacity } from 'react-native'
-import { Container, Header, Title, Button, Icon, Footer, Right, FooterTab, Body, Content } from "native-base";
+import { Text, StyleSheet, View, TextInput, Modal, Dimensions, TouchableOpacity } from 'react-native'
+import { Container, Header, Title, Button, Icon, Footer, Right, FooterTab, Body, Content, Card } from "native-base";
 import IconCom from '../components/IconCom'
 import SQLite from 'react-native-sqlite-storage'
 
@@ -169,9 +169,10 @@ export default class Home extends Component {
         })
       // create table home
       tx.executeSql(`CREATE TABLE IF NOT EXISTS homes (
-        homeID INTEGER PRIMARY KEY AUTOINCREMENT, 
+        homesID INTEGER PRIMARY KEY AUTOINCREMENT, 
         type VARCHAR(30),
         number VARCHAR(30),
+        name VARCHAR(30),
         district VARCHAR(30),
         province VARCHAR(30),
         area VARCHAR(30),
@@ -229,22 +230,38 @@ export default class Home extends Component {
           transparent={true}
           visible={this.state.modalVisible}
           presentationStyle="formSheet"
-          containerStyle={{ backgroundColor: 'red' }}
+          containerStyle={{ backgroundColor: '#0c2461' }}
         >
           <View style={{ flex: 1, backgroundColor: '#00000070' }}>
-            <View style={{ width: 350, height: 500, marginTop: (height - 500) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
-              <Right>
-                <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
-                  <Icon type='AntDesign' name='close' />
-                </Button>
-              </Right>
+            <View style={{ width: 280, height: 350, marginTop: (height - 350) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
+
+              <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
+                <Icon
+                  style={{ marginLeft: 240 }}
+                  type='AntDesign' name='close' />
+
+              </Button>
+              <Text style={{ marginLeft: 17, fontSize: 25, color: '#0c2461', marginTop: 30 }}>ID ทรัพย์สิน</Text>
+
+              <TextInput style={{ borderColor: '#0c2461', width: 253, height: 50, borderWidth: 2, marginLeft: 15 }}
+                underlineColorAndroid="transparent"
+                placeholder=" ID ทรัพย์สินที่ต้องการรับข้อมูล"
+                placeholderTextColor="#535c68"
+              />
+
+              <Button style={{ marginTop: 50, marginLeft: 96, borderRadius: 10, backgroundColor: 'green' }}>
+                <Text style={{ padding: 30, color: 'white' }}>บันทึก</Text>
+              </Button>
+
             </View>
+
           </View>
+
         </Modal>
 
         <Header
           noShadow
-          style={{ backgroundColor: '#eb4d4b' }}>
+          style={{ backgroundColor: '#0c2461' }}>
           <Body style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Title style={{ fontSize: 25 }}>หน้าหลัก</Title>
           </Body>
@@ -262,20 +279,32 @@ export default class Home extends Component {
           </Right>
         </Header>
 
-        <Content style={{ backgroundColor: '#f3a683' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 50 }}>
-            <IconCom click={() => this.ChangePage('Addasset', 'car')}
-              url={require('../../images/car.png')} text="ยานพาหนะ" />
-            <IconCom click={() => this.ChangePage('Addasset', 'accessories')} url={require('../../images/As.png')} text="เครื่องประดับ" />
+        <Content
+          style={{ backgroundColor: '#f7d794' }}>
+          <View
+          // style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 50 }}
+          >
+            <Card button style={{ borderRadius: 60, width: 300, marginLeft: 50, height: 70, marginTop: 60, backgroundColor: '#73C6B6' }}>
+              <IconCom click={() => this.ChangePage('Addasset', 'car')}
+                url={require('../../images/car.png')} text="ยานพาหนะ" /></Card>
+            <Card button style={{ borderRadius: 60, width: 300, marginLeft: 50, height: 70, marginTop: 60, backgroundColor: '#F4D03F' }}>
+              <IconCom click={() => this.ChangePage('Addasset', 'accessories')} url={require('../../images/As.png')} text="เครื่องประดับ" /></Card>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 50 }}>
-            <IconCom click={() => this.ChangePage('Addasset', 'electornic')} url={require('../../images/com.png')} text='เครื่องมืออิเล็กทรอนิกส์' />
-            <IconCom click={() => this.ChangePage('Addasset', 'home')} url={require('../../images/Do.png')} text='เอกสาร' />
+          <View
+          // style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 50 }}
+          >
+            <Card button style={{ borderRadius: 60, width: 300, marginLeft: 50, height: 70, marginTop: 60, backgroundColor: '#EB984E' }}>
+              <IconCom click={() => this.ChangePage('Addasset', 'electornic')} url={require('../../images/com.png')} text='เครื่องมืออิเล็กทรอนิกส์' /></Card>
+            <Card button style={{ borderRadius: 60, width: 300, marginLeft: 50, height: 70, marginTop: 60, backgroundColor: '#fd79a8' }}>
+              <IconCom click={() => this.ChangePage('Addasset', 'home')} url={require('../../images/2.png')} text='เอกสาร' /></Card>
           </View>
+
         </Content>
 
+
+
         <Footer >
-          <FooterTab style={{ backgroundColor: '#eb4d4b' }}>
+          <FooterTab style={{ backgroundColor: '#0c2461' }}>
             <Button
               onPress={() => {
                 let fn = this.props.navigation.getParam('refresh', 'none')

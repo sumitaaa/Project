@@ -5,16 +5,16 @@ const Mytextinput = props => {
   return (
     <View
       style={{
-        margin: 15,
-        height: 40,
-        width: 350,
-        borderColor: '#eb4d4b',
+        margin: 10,
+        height: 45,
+        width: 250,
+        borderColor: '#0c2461',
         borderWidth: 1
       }}>
       <TextInput
         underlineColorAndroid="transparent"
         placeholder={props.placeholder}
-        placeholderTextColor="#eb4d4b"
+        placeholderTextColor="#0c2461"
         onChangeText={props.onChangeText}
         style={props.style}
       />

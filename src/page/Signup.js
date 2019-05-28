@@ -129,7 +129,7 @@ export default class Signup extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={this.state.isLogin ? null : require('../../images/Low.jpg')}
+        source={this.state.isLogin ? null : require('../../images/1.jpg')}
         style={styles.container}
       >
         {!this.state.isLogin &&
@@ -190,7 +190,7 @@ export default class Signup extends React.Component {
         </TouchableOpacity>
         {this.state.isLogin &&
           <Footer style={{ position: 'absolute', bottom: 0, }}>
-            <FooterTab style={{ backgroundColor: '#eb4d4b' }}>
+            <FooterTab style={{ backgroundColor: '#0c2461' }}>
               <Button
                 onPress={() => {
                   this.ChangePage('Signup')
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f3a683',
+    backgroundColor: '#f7d794',
   },
   titel: {
     borderWidth: 1,

@@ -60,8 +60,9 @@ class App extends Component {
 
   render() {
     return (
-      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: '#f3a683' }}>
-        <Text style={{ textAlign: 'center', fontSize: 48, fontWeight: 'bold', color: 'white' }}> Hello</Text>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: '#f7d794' }}>
+        <Text style={{ textAlign: 'center', fontSize: 48, fontWeight: 'bold', color: 'white' }}>Personal  </Text>
+        <Text style={{ textAlign: 'center', fontSize: 35, fontWeight: 'bold', color: 'white' }}>Asset Management </Text>
       </View>
     )
   }

@@ -66,7 +66,7 @@ export default class Accessories extends Component {
                             VALUES (
                               '${type}',
                               '${brand}',
-                              '${number}',
+                              '${number}', 
                               '${color}',
                               '${size}',
                               '${weight}',
@@ -131,7 +131,7 @@ export default class Accessories extends Component {
   render() {
     return (
       <Container>
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
@@ -148,9 +148,9 @@ export default class Accessories extends Component {
             </View>
           </View>
 
-        </Modal>
+        </Modal> */}
 
-        <Header style={{ backgroundColor: '#eb4d4b' }}>
+        <Header style={{ backgroundColor: '#0c2461' }}>
           <Left>
             <Button
               onPress={() => this.props.navigation.goBack()}
@@ -161,13 +161,13 @@ export default class Accessories extends Component {
           <Body>
             <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
-          <Right>
+          {/* <Right>
             <Button
               onPress={() => { this.setState({ modalVisible: true }) }} primary>
               <Icon type='Entypo' name='export' />
               <Text style={{ color: 'white', padding: 15 }}>ถ่ายโอน</Text>
             </Button>
-          </Right>
+          </Right> */}
 
         </Header>
 
@@ -206,7 +206,7 @@ export default class Accessories extends Component {
             <Mytext text='สี' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ color: text }) }}
-              placeholder="ระบุสี "
+              placeholder="ระบุสี เช่น ขาว "
             />
           </View>
           <View style={styles.displayRow}>
@@ -217,7 +217,7 @@ export default class Accessories extends Component {
             />
           </View>
           <View style={styles.displayRow}>
-            <Mytext text='น้ำหนัก' />
+            <Mytext text='น้ำหนัก(ระบุหน่วย)' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ weight: text }) }}
               placeholder="ระบุน้ำหนัก "
@@ -257,7 +257,7 @@ export default class Accessories extends Component {
         </View> */}
 
         </ScrollView>
-        <Button
+        <Button style={{ backgroundColor: '#0c2461' }}
           onPress={this.Save}
           full danger>
           <Text style={{ color: 'white' }}>Save</Text>
@@ -272,14 +272,15 @@ const styles = StyleSheet.create({
 
   displayRow: {
     marginLeft: 45,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    color: '#0c2461'
 
   },
   dateStyle: {
     color: "white",
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#e67e22',
+    backgroundColor: '#0c2461',
     paddingHorizontal: 185,
     marginLeft: '17%',
     borderRadius: 4,

@@ -16,6 +16,7 @@ export default class Home2 extends Component {
             modalVisible: false,
 
             selectedTab: 0,
+            type: 'ที่ดิน',
             number: '',
             list: '',
             typeasset: '',
@@ -55,7 +56,7 @@ export default class Home2 extends Component {
 
                                 db.transaction((tx) => {
                                     tx.executeSql(`
-                            INSERT INTO home (
+                            INSERT INTO condo (
                                 number ,
                                 list,
                                 typeasset,
@@ -103,26 +104,8 @@ export default class Home2 extends Component {
     render() {
         return (
             <Container>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.modalVisible}
-                    presentationStyle="formSheet"
-                    containerStyle={{ backgroundColor: 'red' }}
-                >
-                    <View style={{ flex: 1, backgroundColor: '#00000070' }}>
-                        <View style={{ width: 350, height: 500, marginTop: (height - 500) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
-                            <Right>
-                                <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
-                                    <Icon type='AntDesign' name='close' />
-                                </Button>
-                            </Right>
-                        </View>
-                    </View>
 
-                </Modal>
-
-                <Header style={{ backgroundColor: '#eb4d4b' }}>
+                <Header style={{ backgroundColor: '#0c2461' }}>
                     <Left>
                         <Button
                             onPress={() => this.props.navigation.goBack()}
@@ -133,30 +116,27 @@ export default class Home2 extends Component {
                     <Body>
                         <Title>กรอกข้อมูลทรัพย์สิน</Title>
                     </Body>
-                    <Right>
-                        <Button
-                            onPress={() => { this.setState({ modalVisible: true }) }} primary>
-                            <Icon type='Entypo' name='export' />
-                            <Text style={{ color: 'white', padding: 15 }}>ถ่ายโอน</Text>
-                        </Button>
-                    </Right>
                 </Header>
-                <Header>
+                <Header style={{ backgroundColor: '#dff9fd' }}>
                     <Button
+                        style={{ backgroundColor: '#dff9fd', width: 115 }}
                         onPress={() => { this.props.navigation.navigate('Home2') }}
                         vertical>
-                        <Icon name="flag" />
-                        <Text style={{ color: 'white' }}>ที่ดิน</Text>
-                    </Button>
-                    <Button vertical >
-                        <Icon active name="home" />
-                        <Text style={{ color: 'white' }}>ทรัพย์สินบนที่ดิน</Text>
+                        <Icon style={{ color: 'black' }} name="flag" />
+                        <Text style={{ color: 'black' }} >ที่ดิน</Text>
                     </Button>
                     <Button
+                        style={{ backgroundColor: '#dff9fd', width: 133 }}
+                        vertical >
+                        <Icon style={{ color: 'black' }} active name="home" />
+                        <Text style={{ color: 'black' }}>ทรัพย์สินบนที่ดิน</Text>
+                    </Button>
+                    <Button
+                        style={{ backgroundColor: '#dff9fd', width: 105 }}
                         onPress={() => { this.props.navigation.navigate('flax') }}
                         vertical>
-                        <Icon name="cash" />
-                        <Text style={{ color: 'white' }}>ภาษี</Text>
+                        <Icon style={{ color: 'black' }} name="cash" />
+                        <Text style={{ color: 'black' }}>ภาษี</Text>
                     </Button>
                 </Header>
                 <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
@@ -179,14 +159,14 @@ export default class Home2 extends Component {
                         <Mytext text='ประเภททรัพย์สิน' />
                         <Mytextinput
                             onChangeText={(text) => { this.setState({ typeasset: text }) }}
-                            placeholder="ระบุประเภททรัะพย์สิน เช่น บ้าน "
+                            placeholder="ระบุประเภททรัพย์สิน เช่น บ้าน "
                         />
                     </View>
                     <View style={styles.displayRow}>
                         <Mytext text='ลักษณะทรัพย์สิน' />
                         <Mytextinput
                             onChangeText={(text) => { this.setState({ nature: text }) }}
-                            placeholder="ระบุลักษณะทรัพย์สิน"
+                            placeholder="เช่น บ้านเดี่ยว 1ชั้น 2ห้องนอน"
                         />
                     </View>
                     <View style={styles.displayRow}>
@@ -224,6 +204,7 @@ export default class Home2 extends Component {
 
                 </ScrollView >
                 <Button
+                    style={{ backgroundColor: '#0c2461' }}
                     onPress={this.Save}
                     full danger>
                     <Text style={{ color: 'white' }}>Save</Text>
@@ -238,13 +219,14 @@ const styles = StyleSheet.create({
 
     displayRow: {
         marginLeft: 45,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        color: '#0c2461'
     },
     dateStyle: {
         color: "white",
         fontWeight: 'bold',
         textAlign: 'center',
-        backgroundColor: '#e67e22',
+        backgroundColor: '#0c2461',
         paddingHorizontal: 185,
         marginLeft: '17%',
         borderRadius: 4,

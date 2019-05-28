@@ -16,7 +16,8 @@ export default class Home2 extends Component {
 
       selectedTab: 0,
       value: '',
-      type: 'น.ส.2',
+      type: 'ที่ดิน',
+      name: 'น.ส.2',
       number: '',
       district: '',
       province: '',
@@ -45,20 +46,22 @@ export default class Home2 extends Component {
     console.log(type, number, value, district, province, area, date, ownership, note)
     console.log('is Saved home2')
     if (type) {
-      if (number) {
-        if (district) {
-          if (province) {
-            if (area) {
-              if (date) {
-                if (ownership) {
-                  if (note) {
-                    console.log('is กรอกครบ Saved home2')
+      if (value) {
+        if (number) {
+          if (district) {
+            if (province) {
+              if (area) {
+                if (date) {
+                  if (ownership) {
+                    if (note) {
+                      console.log('is กรอกครบ Saved home2')
 
-                    db.transaction((tx) => {
-                      tx.executeSql(`
+                      db.transaction((tx) => {
+                        tx.executeSql(`
                             INSERT INTO homes (
                               type, 
                               number, 
+                              value,
                               district, 
                               province, 
                               area, 
@@ -69,6 +72,7 @@ export default class Home2 extends Component {
                             VALUES (
                               '${type}',
                               '${number}',
+                              '${value}',
                               '${district}',
                               '${province}',
                               '${area}',
@@ -77,41 +81,44 @@ export default class Home2 extends Component {
                               '${note}'
                             )
                           `, [], (t, res) => {
-                          // save สำเร็จ
-                          console.log('res insert home2 : ', res)
-                          let fn = this.props.navigation.getParam('refresh', 'none')
-                          fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
-                          this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
-                        })
-                    })
+                            // save สำเร็จ
+                            console.log('res insert home2 : ', res)
+                            let fn = this.props.navigation.getParam('refresh', 'none')
+                            fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
+                            this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
+                          })
+                      })
 
+                    } else {
+                      alert('กรุณากรอก Note')
+                    }
                   } else {
-                    alert('กรุณากรอก Note')
+                    alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน')
                   }
                 } else {
-                  alert('กรุณากรอกชื่อผู้ถือกรรมสิทธิ์คนปัจจุบัน')
+                  alert('กรุณากรอกวันที่ออกโฉนด')
                 }
               } else {
-                alert('กรุณากรอกวันที่ออกโฉนด')
+                alert('กรุณากรอกเนื้อที่(ตารางวา)')
               }
             } else {
-              alert('กรุณากรอกเนื้อที่(ตารางวา)')
+              alert('กรุณากรอกจังหวัด')
             }
           } else {
-            alert('กรุณากรอกจังหวัด')
+            alert('กรุณากรอกอำเภอ')
           }
         } else {
-          alert('กรุณากรอกอำเภอ')
+          alert('กรุณากรอกเลขที่โฉนด')
         }
       } else {
-        alert('กรุณากรอกเลขที่โฉนด')
+        alert('กรุณาเลือกชนิด')
       }
     }
   };
   render() {
     return (
       <Container>
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
@@ -128,9 +135,9 @@ export default class Home2 extends Component {
             </View>
           </View>
 
-        </Modal>
+        </Modal> */}
 
-        <Header style={{ backgroundColor: '#eb4d4b' }}>
+        <Header style={{ backgroundColor: '#0c2461' }}>
           <Left>
             <Button
               onPress={() => this.props.navigation.goBack()}
@@ -141,36 +148,44 @@ export default class Home2 extends Component {
           <Body>
             <Title>กรอกข้อมูลทรัพย์สิน</Title>
           </Body>
-          <Right>
+          {/* <Right>
             <Button
               onPress={() => { this.setState({ modalVisible: true }) }} primary>
               <Icon type='Entypo' name='export' />
               <Text style={{ color: 'white', padding: 15 }}>ถ่ายโอน</Text>
             </Button>
-          </Right>
+          </Right> */}
         </Header>
-        <Header>
-          <Button vertical>
-            <Icon name="flag" />
-            <Text style={{ color: 'white' }}>ที่ดิน</Text>
+        <Header style={{ backgroundColor: '#dff9fd' }}>
+          <Button
+            style={{ backgroundColor: '#dff9fd', width: 115 }}
+            onPress={() => { this.setState({ type: 'ที่ดิน', value: 'น.ส.2' }) }}
+            vertical>
+            <Icon style={{ color: 'black' }} name="flag" />
+            <Text style={{ color: 'black' }}>ที่ดิน</Text>
           </Button>
           <Button
+            style={{ backgroundColor: '#dff9fd', width: 133 }}
             onPress={() => { this.props.navigation.navigate('condo') }}
+
             vertical >
-            <Icon active name="home" />
-            <Text style={{ color: 'white' }}>ทรัพย์สินบนที่ดิน</Text>
+            <Icon style={{ color: 'black' }} active name="home" />
+            <Text style={{ color: 'black' }}>ทรัพย์สินบนที่ดิน</Text>
           </Button>
           <Button
+            style={{ backgroundColor: '#dff9fd', width: 105 }}
+            onPress={() => { this.setState({ type: 'ภาษี', value: 'ภาษีเงินได้บุคคลธรรมดา' }) }}
             onPress={() => { this.props.navigation.navigate('flax') }}
             vertical>
-            <Icon name="cash" />
-            <Text style={{ color: 'white' }}>ภาษี</Text>
+            <Icon style={{ color: 'black' }} name="cash" />
+            <Text style={{ color: 'black' }}>ภาษี</Text>
           </Button>
         </Header>
         <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
           <Picker
-            selectedValue={this.state.type}
-            onValueChange={this.onValueChange}>
+            selectedValue={this.state.value}
+            onValueChange={this.updateValue}
+          >
 
             <Picker.Item label="น.ส.2" value="น.ส.2" />
             <Picker.Item label="น.ส.3" value="น.ส.3" />
@@ -197,7 +212,7 @@ export default class Home2 extends Component {
             <Mytext text='อำเภอ' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ district: text }) }}
-              placeholder="ระบุอำเภอ "
+              placeholder="ระบุอำเภอ เช่น ท่าศาลา "
             />
           </View>
           <View style={styles.displayRow}>
@@ -218,7 +233,7 @@ export default class Home2 extends Component {
             <Mytext text='วันที่ออกโฉนด' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ date: text }) }}
-              placeholder="ระบุวันที่ออกโฉนด"
+              placeholder="ระบุวันที่ออกโฉนด  เช่น 01/01/2019"
             />
           </View>
           <View style={styles.displayRow}>
@@ -255,7 +270,7 @@ export default class Home2 extends Component {
         </View> */}
 
         </ScrollView >
-        <Button
+        <Button style={{ backgroundColor: '#0c2461' }}
           onPress={this.Save}
           full danger>
           <Text style={{ color: 'white' }}>Save</Text>
@@ -270,13 +285,14 @@ const styles = StyleSheet.create({
 
   displayRow: {
     marginLeft: 45,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    color: '#0c2461'
   },
   dateStyle: {
     color: "white",
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#e67e22',
+    backgroundColor: '#0c2461',
     paddingHorizontal: 185,
     marginLeft: '17%',
     borderRadius: 4,

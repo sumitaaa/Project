@@ -7,13 +7,12 @@ import Mytextinput from '../components/Mytextinput';
 var db = SQLite.openDatabase({ name: 'DB.db' });
 // test
 
-
 const MyItem1 = ({ note, ownership, province, brand, type,
     partner, date, tabain, color, number, vehicleID }) => (
         <View style={{
             marginVertical: 5,
             fontWeight: 'bold',
-            backgroundColor: '#e67e22',
+            backgroundColor: '#f4edd6',
             borderRadius: 50,
             marginTop: 25,
             marginLeft: 10,
@@ -36,7 +35,7 @@ const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, acce
     <View style={{
         marginVertical: 5,
         fontWeight: 'bold',
-        backgroundColor: '#e67e22',
+        backgroundColor: '#f4edd6',
         borderRadius: 50,
         marginTop: 25,
         marginLeft: 10,
@@ -51,6 +50,31 @@ const MyItem2 = ({ type, brand, number, color, size, weight, partner, note, acce
         <Text style={styles.text}>น้ำหนัก : {weight}</Text>
         <Text style={styles.text}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
         <Text style={styles.text}>Note : {note}</Text>
+    </View>
+)
+const MyItem3 = ({ type, name, brand, number, color, date, insurance, store, owner, partner, note }) => (
+    <View style={{
+        marginVertical: 5,
+        fontWeight: 'bold',
+        backgroundColor: '#f4edd6',
+        borderRadius: 50,
+        marginTop: 25,
+        marginLeft: 10,
+        marginRight: 10
+    }}>
+        <Text style={styles.text}>ID: {electornicID}</Text>
+        <Text style={styles.text}>ประเภท : {type}</Text>
+        <Text style={styles.text}>ชื่อ : {name}</Text>
+        <Text style={styles.text}>ยี่ห้อ : {brand}</Text>
+        <Text style={styles.text}>รุ่น : {number}</Text>
+        <Text style={styles.text}>สี : {color}</Text>
+        <Text style={styles.text}>วันที่ซื้อ : {date}</Text>
+        <Text style={styles.text}>วันหมดประกัน : {insurance}</Text>
+        <Text style={styles.text}>ร้านที่ซื้อ: {store}</Text>
+        <Text style={styles.text}>ผู้ถือกรรมสิทธิ์ : {owner}</Text>
+        <Text style={styles.text}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+        <Text style={styles.text}>Note : {note}</Text>
+
     </View>
 )
 
@@ -101,7 +125,57 @@ export default class search extends Component {
                     }
                 );
             });
+        } else if (comeFrom === 'electornic ') {
+            db.transaction((tx) => {
+                tx.executeSql(`
+                SELECT * FROM electornic  where type = '${this.state.type}'
+              `, (tx, results) => {
+                        var len = results.rows.length;
+                        let items = []
+                        for (let i = 0; i < len; i++) {
+                            items.push(results.rows.item(i))
+                        }
+                        this.setState({ items: items })
+                    })
+            });
         }
+        // else if (comeFrom === 'home') {
+        //     db.transaction((tx) => {
+
+        //         tx.executeSql(`
+        //         SELECT * FROM homes  where type = '${this.state.type}'
+        //       `, (tx, results) => {
+        //                 var len = results.rows.length;
+        //                 let items = []
+        //                 for (let i = 0; i < len; i++) {
+        //                     items.push(results.rows.item(i))
+        //                 }
+        //                 this.setState({ items: items })
+        //             })
+
+        //         tx.executeSql(`
+        //         SELECT * FROM condo  where type = '${this.state.type}'
+        //       `, (tx, results) => {
+        //                 var len = results.rows.length;
+        //                 let items = []
+        //                 for (let i = 0; i < len; i++) {
+        //                     items.push(results.rows.item(i))
+        //                 }
+        //                 this.setState({ items: items })
+        //             })
+        //         tx.executeSql(`
+        //         SELECT * FROM flax  where type = '${this.state.type}'
+        //       `, (tx, results) => {
+        //                 var len = results.rows.length;
+        //                 let items = []
+        //                 for (let i = 0; i < len; i++) {
+        //                     items.push(results.rows.item(i))
+        //                 }
+        //                 this.setState({ items: items })
+        //             })
+
+        //     })
+        // }
     };
 
 
@@ -110,7 +184,7 @@ export default class search extends Component {
             <ScrollView style={{ flexGrow: 1 }}>
                 <Header
                     noShadow
-                    style={{ backgroundColor: '#eb4d4b' }}>
+                    style={{ backgroundColor: '#0c2461' }}>
                     <Left>
                         <Button
                             onPress={() => this.props.navigation.goBack()}
@@ -119,7 +193,7 @@ export default class search extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ marginLeft: 30 }}>ค้นหาข้อมูลทรัพย์สิน</Title>
+                        <Title style={{ marginLeft: 10 }}>ค้นหาข้อมูลทรัพย์สิน</Title>
                     </Body>
                 </Header>
 
@@ -145,6 +219,7 @@ export default class search extends Component {
                 </TouchableOpacity>
 
                 {
+
                     this.state.items.length > 0 ? this.state.items.map((e, i) => {
                         let comeFrom = this.props.navigation.getParam('comeFrom', 'none')
                         console.log('!!!come from : ', comeFrom)
@@ -173,9 +248,25 @@ export default class search extends Component {
                                 size={e.size}
                                 weight={e.weight}
                                 partner={e.partner}
-                                node={e.node}
+                                note={e.note}
                             />
 
+                        } else if (comeFrom === 'electornic') {
+                            return <MyItem3
+                                key={i}
+                                electornicID={e.electornicID}
+                                name={e.name}
+                                type={e.type}
+                                brand={e.brand}
+                                number={e.number}
+                                color={e.color}
+                                date={e.date}
+                                insurance={e.insurance}
+                                store={e.store}
+                                owner={e.owner}
+                                partner={e.partner}
+                                note={e.note}
+                            />
                         }
                     }) : <View style={{ width: '100%' }}>
                             <Text style={{ fontSize: 24, textAlign: 'center', marginTop: 100 }}>ไม่พบข้อมูล</Text>
@@ -195,12 +286,12 @@ const styles = StyleSheet.create({
         padding: 50
     },
     button: {
-        backgroundColor: '#0652DD',
+        backgroundColor: '#0c2461',
         borderRadius: 50,
         paddingVertical: 15,
         width: '55%',
-        marginTop: 5,
-        marginLeft: 120
+        marginTop: 10,
+        marginLeft: 85
     },
     textbutton: {
         textAlign: 'center',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, FlatList, ScrollView, Modal, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, FlatList, ScrollView, Modal, Dimensions, TextInput } from 'react-native'
 import { Container, Header, Title, Button, Icon, Left, Right, Body, Fab } from "native-base";
 import SQLite from 'react-native-sqlite-storage'
 
@@ -10,91 +10,93 @@ const Item1 = ({ id, type, brand, number, color, tabain, date, province, ownersh
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
-    backgroundColor: '#ffe6e6',
-    borderRadius: 20
+    backgroundColor: '#f4edd6',
+    borderRadius: 30
   }}>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}          ทะเบียน : {tabain}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>วันจดทะเบียน : {date}      จังหวัด : {province}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}          ทะเบียน : {tabain}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>วันจดทะเบียน : {date}      จังหวัด : {province}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
 const Item2 = ({ id, type, brand, number, color, size, weight, partner, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
-    backgroundColor: '#ffe6e6',
-    borderRadius: 20
+    backgroundColor: '#f4edd6',
+    borderRadius: 30
   }}>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}        ขนาด : {size}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>น้ำหนัก: {weight}      </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 5, color: '#000000' }}>ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}        ขนาด : {size}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>น้ำหนัก: {weight}      </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
 const Item3 = ({ id, type, name, brand, number, color, date, insurance, store, owner, partner, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
-    backgroundColor: '#ffe6e6',
+    backgroundColor: '#f4edd6',
     borderRadius: 20
   }}>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 5, color: '#000000' }}>ชื่อ : {name}            ยี่ห้อ : {brand}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}         วันที่ซื้อ : {date}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>วันหมดประกัน: {insurance}      ร้านที่ซื้อ : {store}   </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {owner}     ผู้ถือทรัพย์สินร่วม : {partner}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 5, color: '#000000' }}>ชื่อ : {name}            ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}         วันที่ซื้อ : {date}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>วันหมดประกัน: {insurance}      ร้านที่ซื้อ : {store}   </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {owner}     ผู้ถือทรัพย์สินร่วม : {partner}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
 
 
 //ที่ดิน
-const Item4 = ({ id, type, number, district, province, area, date, ownership, note }) => (
+const Item4 = ({ id, type, name, number, district, province, area, date, ownership, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
-    backgroundColor: '#ffe6e6',
+    backgroundColor: '#f4edd6',
     borderRadius: 20
   }}>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         อำเภอ : {district}          จังหวัด : {province}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เนื้อที่(ตารางวา) : {area}         วันที่ออกโฉนด : {date}    </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์คนปัจจุบัน : {ownership}        </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}> ชนิด : {name}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         อำเภอ : {district}          จังหวัด : {province}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>เนื้อที่(ตารางวา) : {area}         วันที่ออกโฉนด : {date}    </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์คนปัจจุบัน : {ownership}        </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
 
-// ทรัพย์สินบนที่ดิน
-// const Item5 = ({ id, type, number, note }) => (
-//   <View style={{
-//     marginVertical: 5,
-//     fontWeight: 'bold',
-//     backgroundColor: '#ffe6e6',
-//     borderRadius: 20
-//   }}>
-//     <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         ความกว้าง : {width}          ความยาว : {long}</Text>
-//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {ownership}        ผู้ถือทรัพย์สินร่วม : {partner}</Text>
-//     <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
-//   </View>
-// )
+//ทรัพย์สินบนที่ดิน
+const Item5 = ({ id, type, number, list, typeasset, nature, ownership, note }) => (
+  <View style={{
+    marginVertical: 5,
+    fontWeight: 'bold',
+    backgroundColor: '#f4edd6',
+    borderRadius: 20
+  }}>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>เลขรหัสประจำทรัพย์สิน : {number}         รายการที่อยู่ : {list}     </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ประเภททรัพย์สิน : {typeasset}       ลักษณะทรัพย์สิน : {nature}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์คนปัจจุบัน : {ownership}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+  </View>
+)
 
 // ภาษี
 const Item6 = ({ id, type, number, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
-    backgroundColor: '#ffe6e6',
+    backgroundColor: '#f4edd6',
     borderRadius: 20
   }}>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>ระบุเลขประจำตัวผู้เสียภาษี : {number} </Text>
-    <Text style={{ fontSize: 17, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ระบุเลขประจำตัวผู้เสียภาษี : {number} </Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
 
@@ -293,26 +295,43 @@ export default class Addasset extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {/* <Modal
+        <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
           presentationStyle="formSheet"
-          containerStyle={{ backgroundColor: 'red' }}
+          containerStyle={{ backgroundColor: '#0c2461' }}
         >
           <View style={{ flex: 1, backgroundColor: '#00000070' }}>
-            <View style={{ width: 350, height: 500, marginTop: (height - 500) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
-              <Right>
-                <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
-                  <Icon type='AntDesign' name='close' />
-                </Button>
-              </Right>
+            <View style={{ width: 280, height: 350, marginTop: (height - 350) / 2, backgroundColor: 'white', alignSelf: 'center' }}>
+
+              <Button onPress={() => { this.setState({ modalVisible: false }) }} transparent>
+                <Icon
+                  style={{ marginLeft: 240 }}
+                  type='AntDesign' name='close' />
+
+              </Button>
+              <Text style={{ marginLeft: 17, fontSize: 25, color: '#0c2461', marginTop: 30 }}>ID ทรัพย์สิน</Text>
+
+              <TextInput style={{ borderColor: '#0c2461', width: 253, height: 50, borderWidth: 2, marginLeft: 15 }}
+                underlineColorAndroid="transparent"
+                placeholder=" ID ทรัพย์สินที่ต้องการโอนข้อมูล"
+                placeholderTextColor="#535c68"
+              />
+
+              <Button style={{ marginTop: 50, marginLeft: 96, borderRadius: 10, backgroundColor: 'green' }}>
+                <Text style={{ padding: 30, color: 'white' }}>บันทึก</Text>
+              </Button>
+
             </View>
+
           </View>
-        </Modal> */}
+
+        </Modal>
+
         <Header
           noShadow
-          style={{ backgroundColor: '#eb4d4b' }}>
+          style={{ backgroundColor: '#0c2461' }}>
           <Left>
             <Button
               onPress={() => this.props.navigation.goBack()}
@@ -321,16 +340,14 @@ export default class Addasset extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>เพิ่มข้อมูลทรัพย์สิน</Title>
+            <Title style={{ fontSize: 15 }}>เพิ่มข้อมูลทรัพย์สิน</Title>
           </Body>
-          {/* <Right>
-            <Button style={{ marginLeft: 70 }}
-              onPress={() => { this.setState({ modalVisible: true }) }} primary>
-              <Icon type='Entypo' name='export' />
-              <Text style={{ color: 'white', padding: 12 }}>ถ่ายโอน</Text>
-            </Button>
-          </Right> */}
           <Right>
+            <Button style={{ marginLeft: 70, backgroundColor: '#808B96', width: 90, height: 42 }}
+              onPress={() => { this.setState({ modalVisible: true }) }} primary>
+
+              <Text style={{ color: 'black', padding: 10, fontSize: 15, }}>ถ่ายโอน</Text>
+            </Button>
             <Button
               onPress={() => {
                 this.ChangePage()
@@ -341,7 +358,7 @@ export default class Addasset extends Component {
           </Right>
         </Header>
 
-        <ScrollView style={{ flexGrow: 1, backgroundColor: '#f3a683' }}>
+        <ScrollView style={{ flexGrow: 1, backgroundColor: '#f7d794' }}>
 
           {
             this.state.items.length === 0 &&
@@ -349,7 +366,7 @@ export default class Addasset extends Component {
               this.state.itemsHome.length === 0 &&
               this.state.itemsFlax.length === 0
               ?
-              <Text style={{ marginTop: 80, fontSize: 20, textAlign: 'center', color: 'white' }}>ไม่มีข้อมูลทรัพย์สิน</Text>
+              <Text style={{ marginTop: 310, fontSize: 30, textAlign: 'center', color: '#424949' }}>ไม่มีข้อมูลทรัพย์สิน</Text>
               :
               this.state.comeFrom !== 'home' ?
                 this.state.items.map((e, i) => {
@@ -399,30 +416,53 @@ export default class Addasset extends Component {
                       partner={e.partner}
                       note={e.note}
                     />
-
                   }
                 })
                 :
                 // คือหน้า HOME
                 <View>
-                  {/* {
-                    this.state.itemsHome.map((e, i) => <Item5
 
-                    />)
-                  } */}
                   {
-                    this.state.itemsCondo.map((e, i) => <Item4
-                    // key={i}
-                    // id={e.homeID}
-                    // type={e.type}
-                    // number={e.number}
-                    // id, type, number, width, long, ownership, partner, note
-                    />)
+                    this.state.itemsHome.map((e, i) =>
+                      <Item4
+                        key={i}
+                        id={e.homesID}
+                        type={e.type}
+                        name={e.name}
+                        number={e.number}
+                        district={e.district}
+                        province={e.province}
+                        area={e.area}
+                        date={e.date}
+                        ownership={e.ownership}
+                        note={e.note}
+                      // type, number, value, district, province, area, date, ownership, note 
+                      />)
                   }
                   {
-                    this.state.itemsFlax.map((e, i) => <Item6
+                    this.state.itemsCondo.map((e, i) =>
+                      <Item5
+                        key={i}
+                        id={e.condoID}
+                        type={e.type}
+                        number={e.number}
+                        list={e.list}
+                        typeasset={e.typeasset}
+                        nature={e.nature}
+                        ownership={e.ownership}
+                        note={e.note}
 
-                    />)
+                      />)
+                  }
+                  {
+                    this.state.itemsFlax.map((e, i) =>
+                      <Item6
+                        key={i}
+                        id={e.flaxID}
+                        type={e.type}
+                        number={e.number}
+                        note={e.note}
+                      />)
                   }
                 </View>
           }
@@ -451,7 +491,9 @@ export default class Addasset extends Component {
               style={{ backgroundColor: '#34A34F' }}>
               <Icon name="search" />
             </Button>
-            <Button style={{ backgroundColor: '#3B5998' }}>
+            <Button
+
+              style={{ backgroundColor: '#3B5998' }}>
               <Icon type='Entypo' name="arrow-with-circle-down" />
             </Button>
             <Button
