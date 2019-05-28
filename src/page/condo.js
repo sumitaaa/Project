@@ -14,9 +14,8 @@ export default class Home2 extends Component {
         this.state = {
             chosenDate: new Date(),
             modalVisible: false,
-
             selectedTab: 0,
-            type: 'ที่ดิน',
+            type: 'ทรัพย์สินแบบที่ดิน',
             number: '',
             list: '',
             typeasset: '',
@@ -43,7 +42,7 @@ export default class Home2 extends Component {
 
 
     Save = () => {
-        const { number, list, typeasset, nature, ownership, note } = this.state
+        const { number, list, typeasset, nature, ownership, note, type } = this.state
         console.log(number, list, typeasset, nature, ownership, note)
         console.log('is Saved condo')
         if (number) {
@@ -57,6 +56,7 @@ export default class Home2 extends Component {
                                 db.transaction((tx) => {
                                     tx.executeSql(`
                             INSERT INTO condo (
+                                type,
                                 number ,
                                 list,
                                 typeasset,
@@ -65,6 +65,7 @@ export default class Home2 extends Component {
                                 note
                             )
                             VALUES (
+                              '${type}',
                               '${number}',
                               '${list}',
                               '${typeasset}',
@@ -76,6 +77,7 @@ export default class Home2 extends Component {
                                             // save สำเร็จ
                                             console.log('res insert condo : ', res)
                                             let fn = this.props.navigation.getParam('refresh', 'none')
+                                            console.log('fn is : ', fn)
                                             fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
                                             this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
                                         })
@@ -120,7 +122,10 @@ export default class Home2 extends Component {
                 <Header style={{ backgroundColor: '#dff9fd' }}>
                     <Button
                         style={{ backgroundColor: '#dff9fd', width: 115 }}
-                        onPress={() => { this.props.navigation.navigate('Home2') }}
+                        onPress={() => {
+                            let fn = this.props.navigation.getParam('refresh', 'none')
+                            this.props.navigation.navigate('Home2', { refresh: () => { fn() } })
+                        }}
                         vertical>
                         <Icon style={{ color: 'black' }} name="flag" />
                         <Text style={{ color: 'black' }} >ที่ดิน</Text>
@@ -133,7 +138,10 @@ export default class Home2 extends Component {
                     </Button>
                     <Button
                         style={{ backgroundColor: '#dff9fd', width: 105 }}
-                        onPress={() => { this.props.navigation.navigate('flax') }}
+                        onPress={() => {
+                            let fn = this.props.navigation.getParam('refresh', 'none')
+                            this.props.navigation.navigate('flax', { refresh: () => { fn() } })
+                        }}
                         vertical>
                         <Icon style={{ color: 'black' }} name="cash" />
                         <Text style={{ color: 'black' }}>ภาษี</Text>

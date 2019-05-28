@@ -13,11 +13,9 @@ export default class Home2 extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-
+      name: 'ที่ดิน',
       selectedTab: 0,
-      value: '',
-      type: 'ที่ดิน',
-      name: 'น.ส.2',
+      type: 'น.ส.2',
       number: '',
       district: '',
       province: '',
@@ -32,7 +30,7 @@ export default class Home2 extends Component {
   }
 
   updateValue = (itemValue, itemIndex) => {
-    this.setState({ value: itemValue })
+    this.setState({ type: itemValue })
   }
   onValueChange = (value) => {
     this.setState({
@@ -40,13 +38,12 @@ export default class Home2 extends Component {
     });
   }
 
-
   Save = () => {
-    const { type, number, value, district, province, area, date, ownership, note } = this.state
+    const { type, number, value, district, province, area, date, ownership, note, name } = this.state
     console.log(type, number, value, district, province, area, date, ownership, note)
     console.log('is Saved home2')
     if (type) {
-      if (value) {
+      if (name) {
         if (number) {
           if (district) {
             if (province) {
@@ -59,9 +56,9 @@ export default class Home2 extends Component {
                       db.transaction((tx) => {
                         tx.executeSql(`
                             INSERT INTO homes (
-                              type, 
+                              type,
+                              name,
                               number, 
-                              value,
                               district, 
                               province, 
                               area, 
@@ -71,8 +68,8 @@ export default class Home2 extends Component {
                             )
                             VALUES (
                               '${type}',
+                              '${name}',
                               '${number}',
-                              '${value}',
                               '${district}',
                               '${province}',
                               '${area}',
@@ -84,6 +81,7 @@ export default class Home2 extends Component {
                             // save สำเร็จ
                             console.log('res insert home2 : ', res)
                             let fn = this.props.navigation.getParam('refresh', 'none')
+
                             fn()  // รีเฟรชก่อนแล้วเปลี่ยนหน้า บอกด้วยว่ามาจากไหน comeFrom '...'
                             this.props.navigation.navigate('Addasset', { comeFrom: 'home' })
                           })
@@ -166,7 +164,10 @@ export default class Home2 extends Component {
           </Button>
           <Button
             style={{ backgroundColor: '#dff9fd', width: 133 }}
-            onPress={() => { this.props.navigation.navigate('condo') }}
+            onPress={() => {
+              let fn = this.props.navigation.getParam('refresh', 'none')
+              this.props.navigation.navigate('condo', { refresh: () => { fn() } })
+            }}
 
             vertical >
             <Icon style={{ color: 'black' }} active name="home" />
@@ -174,8 +175,11 @@ export default class Home2 extends Component {
           </Button>
           <Button
             style={{ backgroundColor: '#dff9fd', width: 105 }}
-            onPress={() => { this.setState({ type: 'ภาษี', value: 'ภาษีเงินได้บุคคลธรรมดา' }) }}
-            onPress={() => { this.props.navigation.navigate('flax') }}
+            //onPress={() => { this.setState({ type: 'ภาษี', value: 'ภาษีเงินได้บุคคลธรรมดา' }) }}
+            onPress={() => {
+              let fn = this.props.navigation.getParam('refresh', 'none')
+              this.props.navigation.navigate('flax', { refresh: () => { fn() } })
+            }}
             vertical>
             <Icon style={{ color: 'black' }} name="cash" />
             <Text style={{ color: 'black' }}>ภาษี</Text>

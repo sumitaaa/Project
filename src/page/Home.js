@@ -58,7 +58,7 @@ export default class Home extends Component {
                       }
                       jsonData.electornic = electornic
 
-                      tx.executeSql(`SELECT * FROM home`,
+                      tx.executeSql(`SELECT * FROM homes`,
                         [], (tw, r) => {
                           let home = []
                           for (let i = 0; i < r.rows.length; i++) {
@@ -97,6 +97,10 @@ export default class Home extends Component {
       //tx.executeSql(`DROP TABLE vehicles`, [], (tx, res) => { alert('ลบ vehicles db!!') })
       //tx.executeSql(`DROP TABLE user`, [], (tx, res) => { alert('ลบ user db!!') })
       //tx.executeSql(`DROP TABLE accessories`, [], (tx, res) => { alert('ลบ accessories db!!') })
+      //tx.executeSql(`DROP TABLE electornic`, [], (tx, res) => { alert('ลบ electornic db!!') })
+      //tx.executeSql(`DROP TABLE homes`, [], (tx, res) => { alert('ลบ homes db!!') })
+      // tx.executeSql(`DROP TABLE flax`, [], (tx, res) => { alert('ลบ flax db!!') })
+      // tx.executeSql(`DROP TABLE condo`, [], (tx, res) => { alert('ลบ condo db!!') })
     })
     // ------
 
@@ -154,6 +158,7 @@ export default class Home extends Component {
         electornicID INTEGER PRIMARY KEY AUTOINCREMENT,
         type VARCHAR(30),
         name VARCHAR(30),
+        value VARCHAR(30),
         brand VARCHAR(30),
         number VARCHAR(30),
         color VARCHAR(20),
@@ -171,8 +176,8 @@ export default class Home extends Component {
       tx.executeSql(`CREATE TABLE IF NOT EXISTS homes (
         homesID INTEGER PRIMARY KEY AUTOINCREMENT, 
         type VARCHAR(30),
-        number VARCHAR(30),
         name VARCHAR(30),
+        number VARCHAR(30),
         district VARCHAR(30),
         province VARCHAR(30),
         area VARCHAR(30),

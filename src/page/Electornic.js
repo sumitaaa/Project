@@ -16,9 +16,8 @@ export default class Electornic extends Component {
       modalVisible: false,
 
 
-      value: '',
-      type: 'call',
-      name: 'harddisk',
+      value: 'Harddisk',
+      type: 'มือถือ/คอม',
       brand: '',
       number: '',
       color: '',
@@ -31,15 +30,10 @@ export default class Electornic extends Component {
 
 
     };
-    this.setDate = this.setDate.bind(this);
   }
 
 
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
-    //#ffd32a
-  }
   updateValue = (itemValue, itemIndex) => {
     this.setState({ value: itemValue })
   }
@@ -49,7 +43,7 @@ export default class Electornic extends Component {
     });
   }
   Save = () => {
-    const { type, value, brand, number, color, date, insurance, store, owner, partner, note } = this.state
+    const { type, value, brand, number, name, color, date, insurance, store, owner, partner, note } = this.state
     console.log(type, value, brand, number, color, date, insurance, store, owner, partner, note)
     console.log('is Saved electornic')
     if (type) {
@@ -68,6 +62,7 @@ export default class Electornic extends Component {
                           db.transaction((tx) => {
                             tx.executeSql(`
                             INSERT INTO electornic (
+                              name,
                               type,
                               value,
                               brand,
@@ -79,9 +74,9 @@ export default class Electornic extends Component {
                               owner,
                               partner,
                               note
-
                             )
                             VALUES (
+                              '${name}',
                               '${type}',
                               '${value}',
                               '${brand}',
@@ -93,7 +88,6 @@ export default class Electornic extends Component {
                               '${owner}',
                               '${partner}',
                               '${note}'
-
                             )
                           `, [], (t, res) => {
                                 // save สำเร็จ
@@ -376,7 +370,7 @@ export default class Electornic extends Component {
             <Mytext text='ร้าน' />
             <Mytextinput
               onChangeText={(text) => { this.setState({ store: text }) }}
-              placeholder="ระบุวันร้านที่ซื้อ "
+              placeholder="ระบุร้านที่ซื้อ "
             />
           </View>
           <View style={styles.displayRow}>

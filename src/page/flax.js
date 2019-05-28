@@ -14,9 +14,9 @@ export default class Home2 extends Component {
         this.state = {
             chosenDate: new Date(),
             modalVisible: false,
-
+            name: 'ภาษีเงินได้บุคคลธรรมดา',
             selectedTab: 0,
-            type: 'ภาษีเงินได้บุคคลธรรมดา',
+            type: 'ภาษี',
             number: '',
             note: ''
         };
@@ -30,13 +30,13 @@ export default class Home2 extends Component {
     }
     onValueChange = (value) => {
         this.setState({
-            type: value
+            name: value
         });
     }
 
 
     Save = () => {
-        const { type, number, note } = this.state
+        const { type, number, note, name } = this.state
         console.log(type, number, note)
         console.log('is Saved flax')
         if (type) {
@@ -48,11 +48,13 @@ export default class Home2 extends Component {
                         tx.executeSql(`
                             INSERT INTO flax (
                               type,
+                              name,
                               number,
                               note
                             )
                             VALUES (
                               '${type}',
+                              '${name}',
                               '${number}',
                               '${note}'
                             )
@@ -93,14 +95,20 @@ export default class Home2 extends Component {
                 <Header style={{ backgroundColor: '#dff9fd' }}>
                     <Button
                         style={{ backgroundColor: '#dff9fd', width: 115 }}
-                        onPress={() => { this.props.navigation.navigate('Home2') }}
+                        onPress={() => {
+                            let fn = this.props.navigation.getParam('refresh', 'none')
+                            this.props.navigation.navigate('Home2', { refresh: () => { fn() } })
+                        }}
                         vertical>
                         <Icon style={{ color: 'black' }} name="flag" />
                         <Text style={{ color: 'black' }}>ที่ดิน</Text>
                     </Button>
                     <Button
                         style={{ backgroundColor: '#dff9fd', width: 133 }}
-                        onPress={() => { this.props.navigation.navigate('condo') }}
+                        onPress={() => {
+                            let fn = this.props.navigation.getParam('refresh', 'none')
+                            this.props.navigation.navigate('condo', { refresh: () => { fn() } })
+                        }}
                         vertical >
                         <Icon style={{ color: 'black' }} active name="home" />
                         <Text style={{ color: 'black' }}>ทรัพย์สินบนที่ดิน</Text>
@@ -114,7 +122,7 @@ export default class Home2 extends Component {
                 </Header>
                 <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 20 }}>
                     <Picker
-                        selectedValue={this.state.type}
+                        selectedValue={this.state.name}
                         onValueChange={this.onValueChange}>
 
                         <Picker.Item label="ภาษีเงินได้บุคคลธรรมดา" value="ภาษีเงินได้บุคคลธรรมดา" />

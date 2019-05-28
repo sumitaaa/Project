@@ -36,7 +36,7 @@ const Item2 = ({ id, type, brand, number, color, size, weight, partner, note }) 
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>Node : {note}</Text>
   </View>
 )
-const Item3 = ({ id, type, name, brand, number, color, date, insurance, store, owner, partner, note }) => (
+const Item3 = ({ id, type, name, value, brand, number, color, date, insurance, store, owner, partner, note }) => (
   <View style={{
     marginVertical: 5,
     fontWeight: 'bold',
@@ -44,7 +44,7 @@ const Item3 = ({ id, type, name, brand, number, color, date, insurance, store, o
     borderRadius: 20
   }}>
     <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 15, marginLeft: 20, padding: 5, color: '#000000' }}>ชื่อ : {name}            ยี่ห้อ : {brand}</Text>
+    <Text style={{ fontSize: 15, marginLeft: 20, padding: 5, color: '#000000' }}>ชื่อ : {value}            ยี่ห้อ : {brand}</Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>รุ่น : {number}          สี : {color}         วันที่ซื้อ : {date}</Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>วันหมดประกัน: {insurance}      ร้านที่ซื้อ : {store}   </Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์ : {owner}     ผู้ถือทรัพย์สินร่วม : {partner}</Text>
@@ -61,8 +61,8 @@ const Item4 = ({ id, type, name, number, district, province, area, date, ownersh
     backgroundColor: '#f4edd6',
     borderRadius: 20
   }}>
-    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {type}</Text>
-    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}> ชนิด : {name}</Text>
+    <Text style={{ fontSize: 17, marginLeft: 10, color: '#000000' }}>ID: {id}  /  ประเภท : {name}</Text>
+    <Text style={{ fontSize: 20, marginLeft: 10, color: '#000000' }}> ชนิด : {type}</Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>เลขที่โฉนด : {number}         อำเภอ : {district}          จังหวัด : {province}</Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>เนื้อที่(ตารางวา) : {area}         วันที่ออกโฉนด : {date}    </Text>
     <Text style={{ fontSize: 15, marginLeft: 20, padding: 2, color: '#000000' }}>ผู้ถือกรรมสิทธิ์คนปัจจุบัน : {ownership}        </Text>
@@ -403,6 +403,7 @@ export default class Addasset extends Component {
                   } else if (this.state.comeFrom === 'electornic') {
                     return <Item3
                       key={i}
+                      value={e.value}
                       id={e.electornicID}
                       name={e.name}
                       type={e.type}
@@ -470,7 +471,10 @@ export default class Addasset extends Component {
         </ScrollView>
 
         {
-          this.state.items.length > 0 &&
+          (this.state.items.length > 0 ||
+            this.state.itemsHome.length > 0 ||
+            this.state.itemsCondo.length > 0 ||
+            this.state.itemsFlax.length > 0) &&
           <Fab
             active={this.state.active}
             direction="up"

@@ -134,7 +134,7 @@ export default class Signup extends React.Component {
       >
         {!this.state.isLogin &&
           <View>
-            <Text style={{ fontSize: 50, color: 'white' }}> Welcome </Text>
+            <Text style={{ fontSize: 50, color: 'white', textAlign: 'center' }}> Welcome </Text>
             <Text style={{ marginBottom: 30, marginTop: 40, fontSize: 20, color: 'white' }}> Please enter your Personal info </Text>
           </View>
         }
